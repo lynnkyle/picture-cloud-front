@@ -2,9 +2,10 @@ import axios from 'axios'
 import { message } from 'ant-design-vue'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8082/api/',
+  // baseURL: '',
+  baseURL: 'http://localhost:8082',
   timeout: 60000,
-  withCredentials: true,
+  withCredentials: true
 })
 
 instance.interceptors.response.use(
@@ -23,7 +24,7 @@ instance.interceptors.response.use(
   },
   (error) => {
     return Promise.reject(error)
-  },
+  }
 )
 
 export default instance

@@ -3,7 +3,13 @@ import { h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
 import { MenuProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
+//
+const loginUserStore = useLoginUserStore()
+loginUserStore.fetchLoginUser()
+
+// 菜单
 const router = useRouter()
 const current = ref<string[]>(['/'])
 const items = ref<MenuProps['items']>([
@@ -11,22 +17,22 @@ const items = ref<MenuProps['items']>([
     key: '/',
     icon: h(HomeOutlined),
     label: '主页',
-    title: '主页',
+    title: '主页'
   },
   {
     key: '/about',
     label: '关于',
-    title: '关于',
+    title: '关于'
   },
   {
     key: '/others',
     label: '其它',
-    title: '其他',
-  },
+    title: '其他'
+  }
 ])
 const doMenuClick = ({ key }) => {
   router.push({
-    path: key,
+    path: key
   })
 }
 // 路由守卫
@@ -55,8 +61,11 @@ router.afterEach((to, from, next) => {
         />
       </a-col>
       <a-col flex="120px">
-        <div class="user-login-status">
-          <a-button>登录</a-button>
+        <div v-if="loginUserStore.loginUser.id">
+          {{ loginUserStore.loginUser.user_name ?? '无名' }}
+        </div>
+        <div v-else>
+          <a-button type="primary" href="/user/login">登录</a-button>
         </div>
       </a-col>
     </a-row>
