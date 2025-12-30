@@ -1,25 +1,20 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-
+import { getLoginUserUsingGet } from '@/api/userController.ts'
 
 /**
  * 存储登录用户信息状态
  */
 export const useLoginUserStore = defineStore('loginUser', () => {
-  const loginUser = ref<any>(
-    {
-      user_name: '未登录'
-    }
-  )
+  const loginUser = ref<API.LoginUserVO>({
+    userName: '未登录'
+  })
 
   async function fetchLoginUser(): Promise<void> {
-    // TODO: 获取登录用户信息
-    setTimeout(() => {
-      loginUser.value = {
-        id: 1,
-        user_name: 'admin'
-      }
-    }, 3000)
+    const res = (await getLoginUserUsingGet()).data
+    if (res.data && res.code === 20000) {
+      loginUser.value = res.data
+    }
   }
 
   /**
