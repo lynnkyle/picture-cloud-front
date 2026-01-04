@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
-import { MenuProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons-vue'
+import { type MenuProps, message } from 'ant-design-vue'
+import { userLogoutUsingPost } from '@/api/userController.ts'
 
-//
 const loginUserStore = useLoginUserStore()
 loginUserStore.fetchLoginUser()
 
@@ -17,23 +18,39 @@ const items = ref<MenuProps['items']>([
     key: '/',
     icon: h(HomeOutlined),
     label: '主页',
-    title: '主页'
+    title: '主页',
   },
   {
-    key: '/about',
-    label: '关于',
-    title: '关于'
+    key: '/admin/user-manage',
+    label: '用户管理',
+    title: '用户管理',
   },
   {
     key: '/others',
     label: '其它',
-    title: '其他'
-  }
+    title: '其他',
+  },
 ])
 const doMenuClick = ({ key }) => {
   router.push({
-    path: key
+    path: key,
   })
+}
+// 用户注销
+const doLogout = async () => {
+  const resp = await userLogoutUsingPost()
+  const res = resp.data
+  if (res.code === 20000) {
+    loginUserStore.setLoginUser({
+      userName: '未登录',
+    })
+    message.success('退出登录')
+    router.push({
+      path: '/user/login',
+    })
+  } else {
+    message.error(res.description)
+  }
 }
 // 路由守卫
 router.afterEach((to, from, next) => {
@@ -60,9 +77,29 @@ router.afterEach((to, from, next) => {
           @click="doMenuClick"
         />
       </a-col>
+      <!--用户信息展示-->
       <a-col flex="120px">
         <div v-if="loginUserStore.loginUser.id">
-          {{ loginUserStore.loginUser.user_name ?? '无名' }}
+          <a-dropdown>
+            <a-space>
+              <a-avatar size="large" :src="loginUserStore.loginUser.userAvatar">
+                <template #icon>
+                  <UserOutlined />
+                </template>
+              </a-avatar>
+              {{ loginUserStore.loginUser.userName ?? '无名' }}
+            </a-space>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item @click="doLogout">
+                  <a-space>
+                    <LogoutOutlined />
+                    <a href="javascript:;">退出登录</a>
+                  </a-space>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </div>
         <div v-else>
           <a-button type="primary" href="/user/login">登录</a-button>

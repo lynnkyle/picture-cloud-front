@@ -7,11 +7,12 @@ import { getLoginUserUsingGet } from '@/api/userController.ts'
  */
 export const useLoginUserStore = defineStore('loginUser', () => {
   const loginUser = ref<API.LoginUserVO>({
-    userName: '未登录'
+    userName: '未登录',
   })
 
   async function fetchLoginUser(): Promise<void> {
-    const res = (await getLoginUserUsingGet()).data
+    const req = await getLoginUserUsingGet()
+    const res = req.data
     if (res.data && res.code === 20000) {
       loginUser.value = res.data
     }
@@ -28,6 +29,6 @@ export const useLoginUserStore = defineStore('loginUser', () => {
   return {
     loginUser,
     fetchLoginUser,
-    setLoginUser
+    setLoginUser,
   }
 })
