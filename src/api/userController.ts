@@ -14,13 +14,13 @@ export async function addUserUsingPost(body: API.UserAddRequest, options?: { [ke
   })
 }
 
-/** deleteUser GET /api/user/delete */
-export async function deleteUserUsingGet(
+/** deleteUser POST /api/user/delete */
+export async function deleteUserUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseBoolean_>('/api/user/delete', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

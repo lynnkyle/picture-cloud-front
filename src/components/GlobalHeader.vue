@@ -1,39 +1,48 @@
 <script lang="ts" setup>
-import { h, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
-import { useRouter } from 'vue-router'
+import { type RouteRecordRaw, useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons-vue'
-import { type MenuProps, message } from 'ant-design-vue'
+import { type ItemType, type MenuProps, message } from 'ant-design-vue'
 import { userLogoutUsingPost } from '@/api/userController.ts'
+import checkAccess from '@/access/checkAccess.ts'
 
 const loginUserStore = useLoginUserStore()
 loginUserStore.fetchLoginUser()
 
-// 菜单
 const router = useRouter()
+// 菜单
 const current = ref<string[]>(['/'])
-const items = ref<MenuProps['items']>([
-  {
-    key: '/',
-    icon: h(HomeOutlined),
-    label: '主页',
-    title: '主页',
-  },
-  {
-    key: '/admin/user-manage',
-    label: '用户管理',
-    title: '用户管理',
-  },
-  {
-    key: '/others',
-    label: '其它',
-    title: '其他',
-  },
-])
+
+
+
+const filterMenus = (menus: MenuProps['items'] = []) => {
+  return menus?.filter((menu) => {
+    if (menu?.hideInMenu) {
+      return false
+    }
+    return checkAccess(loginUserStore.loginUser, menu.access as string)
+  })
+}
+const items = computed(() => {
+  const menuList: MenuProps['items'] = []
+  const routes = router.getRoutes()
+  routes.forEach(route => {
+    const menuItem: ItemType = {
+      key: route.path,
+      title: route.name,
+      label: route.name,
+      icon: route.meta.icon,
+      access: route.meta.icon
+    }
+    menuList.push(menuItem)
+  })
+  return filterMenus(menuList)
+})
 const doMenuClick = ({ key }) => {
   router.push({
-    path: key,
+    path: key
   })
 }
 // 用户注销
@@ -42,11 +51,11 @@ const doLogout = async () => {
   const res = resp.data
   if (res.code === 20000) {
     loginUserStore.setLoginUser({
-      userName: '未登录',
+      userName: '未登录'
     })
     message.success('退出登录')
     router.push({
-      path: '/user/login',
+      path: '/user/login'
     })
   } else {
     message.error(res.description)
