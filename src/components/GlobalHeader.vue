@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
-import { type RouteRecordRaw, useRouter } from 'vue-router'
+import { type RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons-vue'
 import { type ItemType, type MenuProps, message } from 'ant-design-vue'
@@ -15,9 +15,34 @@ const router = useRouter()
 // 菜单
 const current = ref<string[]>(['/'])
 
+interface MenuItem {
+  key: string
+  title: string
+  label?: string
+  icon?: () => any
+  access?: string
+  hideInMenu: boolean
+  children?: MenuItem[]
+}
 
-
-const filterMenus = (menus: MenuProps['items'] = []) => {
+const processRoutes = (routes: RouteRecordRaw[], menuList: MenuItem[]) => {
+  routes.forEach((route) => {
+    const menuItem: MenuItem = {
+      key: route.path,
+      title: route.name as string,
+      label: route.name as string,
+      icon: () => route.meta?.icon ?? null,
+      access: route.meta?.access as string,
+      hideInMenu: route.meta?.hideInMenu as boolean,
+    }
+    if (route.children && route.children.length > 0) {
+      menuItem.children = []
+      processRoutes(route.children, menuItem.children)
+    }
+    menuList.push(menuItem)
+  })
+}
+const filterMenus = (menus: MenuItem[] = []) => {
   return menus?.filter((menu) => {
     if (menu?.hideInMenu) {
       return false
@@ -26,23 +51,15 @@ const filterMenus = (menus: MenuProps['items'] = []) => {
   })
 }
 const items = computed(() => {
-  const menuList: MenuProps['items'] = []
-  const routes = router.getRoutes()
-  routes.forEach(route => {
-    const menuItem: ItemType = {
-      key: route.path,
-      title: route.name,
-      label: route.name,
-      icon: route.meta.icon,
-      access: route.meta.icon
-    }
-    menuList.push(menuItem)
-  })
+  const menuList: MenuItem[] = []
+  const routes = router.options.routes as RouteRecordRaw[]
+  processRoutes(routes, menuList)
+  console.log(menuList)
   return filterMenus(menuList)
 })
-const doMenuClick = ({ key }) => {
+const doMenuClick = ({ key }: any) => {
   router.push({
-    path: key
+    path: key,
   })
 }
 // 用户注销
@@ -51,11 +68,11 @@ const doLogout = async () => {
   const res = resp.data
   if (res.code === 20000) {
     loginUserStore.setLoginUser({
-      userName: '未登录'
+      userName: '未登录',
     })
     message.success('退出登录')
     router.push({
-      path: '/user/login'
+      path: '/user/login',
     })
   } else {
     message.error(res.description)
