@@ -11,8 +11,8 @@ export const useLoginUserStore = defineStore('loginUser', () => {
   })
 
   async function fetchLoginUser(): Promise<void> {
-    const req = await getLoginUserUsingGet()
-    const res = req.data
+    const resp = await getLoginUserUsingGet()
+    const res = resp.data
     if (res.data && res.code === 20000) {
       loginUser.value = res.data
     }

@@ -6,6 +6,20 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseIPagePicture_ = {
+    code?: number
+    data?: IPagePicture_
+    description?: string
+    message?: string
+  }
+
+  type BaseResponseIPagePictureVO_ = {
+    code?: number
+    data?: IPagePictureVO_
+    description?: string
+    message?: string
+  }
+
   type BaseResponseIPageUserVO_ = {
     code?: number
     data?: IPageUserVO_
@@ -23,6 +37,27 @@ declare namespace API {
   type BaseResponseLong_ = {
     code?: number
     data?: number
+    description?: string
+    message?: string
+  }
+
+  type BaseResponsePicture_ = {
+    code?: number
+    data?: Picture
+    description?: string
+    message?: string
+  }
+
+  type BaseResponsePictureTagCategory_ = {
+    code?: number
+    data?: PictureTagCategory
+    description?: string
+    message?: string
+  }
+
+  type BaseResponsePictureVO_ = {
+    code?: number
+    data?: PictureVO
     description?: string
     message?: string
   }
@@ -52,6 +87,16 @@ declare namespace API {
     id?: number
   }
 
+  type getPictureByIdUsingGETParams = {
+    /** id */
+    id?: number
+  }
+
+  type getPictureVOByIdUsingGETParams = {
+    /** id */
+    id?: number
+  }
+
   type getUserByIdUsingGETParams = {
     /** id */
     id: number
@@ -60,6 +105,22 @@ declare namespace API {
   type getUserVOByIdUsingGETParams = {
     /** id */
     id: number
+  }
+
+  type IPagePicture_ = {
+    current?: number
+    pages?: number
+    records?: Picture[]
+    size?: number
+    total?: number
+  }
+
+  type IPagePictureVO_ = {
+    current?: number
+    pages?: number
+    records?: PictureVO[]
+    size?: number
+    total?: number
   }
 
   type IPageUserVO_ = {
@@ -80,6 +141,108 @@ declare namespace API {
     userName?: string
     userProfile?: string
     userRole?: string
+  }
+
+  type Picture = {
+    createTime?: string
+    editTime?: string
+    id?: number
+    isDelete?: number
+    picCategory?: string
+    picFormat?: string
+    picHeight?: number
+    picIntro?: string
+    picName?: string
+    picScale?: number
+    picSize?: number
+    picTags?: string
+    picUrl?: string
+    picWidth?: number
+    reviewMessage?: string
+    reviewStatus?: number
+    reviewTime?: string
+    reviewerId?: number
+    updateTime?: string
+    userId?: number
+  }
+
+  type PictureEditRequest = {
+    id?: number
+    picCategory?: string
+    picIntro?: string
+    picName?: string
+    picTags?: string[]
+  }
+
+  type PictureQueryRequest = {
+    current?: number
+    id?: number
+    pageSize?: number
+    picCategory?: string
+    picFormat?: string
+    picHeight?: number
+    picIntro?: string
+    picName?: string
+    picScale?: number
+    picSize?: number
+    picTags?: string[]
+    picWidth?: number
+    reviewMessage?: string
+    reviewStatus?: number
+    reviewTime?: string
+    reviewerId?: number
+    searchText?: string
+    sortField?: string
+    sortOrder?: string
+    userId?: number
+  }
+
+  type PictureReviewerRequest = {
+    id?: number
+    reviewMessage?: string
+    reviewStatus?: number
+  }
+
+  type PictureTagCategory = {
+    categoryList?: string[]
+    tagList?: string[]
+  }
+
+  type PictureUpdateRequest = {
+    id?: number
+    picCategory?: string
+    picIntro?: string
+    picName?: string
+    picTags?: string[]
+  }
+
+  type PictureUploadRequest = {
+    fileUrl?: string
+    id?: number
+  }
+
+  type PictureVO = {
+    createTime?: string
+    editTime?: string
+    id?: number
+    picCategory?: string
+    picFormat?: string
+    picHeight?: number
+    picIntro?: string
+    picName?: string
+    picScale?: number
+    picSize?: number
+    picTags?: string[]
+    picUrl?: string
+    picWidth?: number
+    updateTime?: string
+    user?: UserVO
+    userId?: number
+  }
+
+  type uploadPictureUsingPOSTParams = {
+    fileUrl?: string
+    id?: number
   }
 
   type User = {
@@ -113,6 +276,7 @@ declare namespace API {
     current?: number
     id?: number
     pageSize?: number
+    searchText?: string
     sortField?: string
     sortOrder?: string
     userAccount?: string
@@ -122,9 +286,9 @@ declare namespace API {
   }
 
   type UserRegisterRequest = {
+    checkPassword?: string
     userAccount?: string
     userPassword?: string
-    checkPassword?: string
   }
 
   type UserUpdateRequest = {
@@ -140,6 +304,7 @@ declare namespace API {
   type UserVO = {
     createTime?: string
     id?: number
+    updateTime?: string
     userAccount?: string
     userAvatar?: string
     userName?: string

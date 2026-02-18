@@ -7,9 +7,13 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons-vue'
 import { type ItemType, type MenuProps, message } from 'ant-design-vue'
 import { userLogoutUsingPost } from '@/api/userController.ts'
 import checkAccess from '@/access/checkAccess.ts'
+import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 
 const loginUserStore = useLoginUserStore()
 loginUserStore.fetchLoginUser()
+
+const categoryTagStore = useCategoryTagStore()
+categoryTagStore.fetchCategoryTagStore()
 
 const router = useRouter()
 // 菜单
@@ -54,7 +58,6 @@ const items = computed(() => {
   const menuList: MenuItem[] = []
   const routes = router.options.routes as RouteRecordRaw[]
   processRoutes(routes, menuList)
-  console.log(menuList)
   return filterMenus(menuList)
 })
 const doMenuClick = ({ key }: any) => {
@@ -80,7 +83,6 @@ const doLogout = async () => {
 }
 // 路由守卫
 router.afterEach((to, from, next) => {
-  console.log(to.path)
   current.value = [to.path]
 })
 </script>
