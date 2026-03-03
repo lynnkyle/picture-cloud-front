@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { listUserVoByPageUsingPost } from '@/api/userController.ts'
+import { PlusOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 // 表格属性
@@ -115,7 +116,8 @@ onMounted(() => {
 
 <template>
   <div id="userManage">
-    <div class="form">
+    <h2 style="margin-bottom: 16px; padding: 0 14px">用户管理</h2>
+    <div class="form" style="padding: 0 16px">
       <a-form layout="inline">
         <a-form-item label="账号">
           <a-input
@@ -175,7 +177,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.form {
+#userManage .form {
   margin-bottom: 15px;
+}
+#userManage :deep(.ant-form-item-label > label) {
+  font-size: 16px;
+  font-weight: 400;
 }
 </style>

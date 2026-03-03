@@ -50,9 +50,6 @@ const doUpload = async () => {
       class="img-background"
       style="
         margin: 10px 0 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         object-fit: contain;
         background: #00000005;
         border: 1px dashed #d9d9d9;
@@ -60,8 +57,10 @@ const doUpload = async () => {
       "
       v-if="props.picture?.picUrl"
     >
-      <loading-outlined v-if="loading"></loading-outlined>
-      <img v-else :src="props.picture?.picUrl" alt="image" />
+      <a-flex align="center" justify="center">
+        <loading-outlined v-if="loading"></loading-outlined>
+        <img v-else :src="props.picture?.picUrl" alt="image" />
+      </a-flex>
     </div>
   </div>
 </template>

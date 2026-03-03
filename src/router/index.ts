@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { h } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
+import ACCESS_ENUM from '@/access/accessEnum.ts'
 import IndexPage from '@/pages/IndexPage.vue'
 import UserRegisterPage from '@/pages/user/UserRegisterPage.vue'
 import UserLoginPage from '@/pages/user/UserLoginPage.vue'
 import UserManagePage from '@/pages/admin/UserManagePage.vue'
-import ACCESS_ENUM from '@/access/accessEnum.ts'
-import AddPicturePage from '@/pages/PictureAddPage.vue'
+import PictureAddPage from '@/pages/PictureAddPage.vue'
 import PictureManagePage from '@/pages/admin/PictureManagePage.vue'
 import PictureDetailPage from '@/pages/PictureDetailPage.vue'
+import PictureAddBatchPage from '@/pages/PictureAddBatchPage.vue'
 
 const routes = [
   {
@@ -46,7 +47,16 @@ const routes = [
   {
     path: '/picture/add',
     name: '图片创建',
-    component: AddPicturePage,
+    component: PictureAddPage,
+  },
+  {
+    path: '/picture/add/batch',
+    name: '图片批量创建',
+    component: PictureAddBatchPage,
+    meta: {
+      hideInMenu: true,
+      access: ACCESS_ENUM.ADMIN,
+    },
   },
   {
     path: '/admin/picture-manage',

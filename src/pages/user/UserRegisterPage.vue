@@ -31,7 +31,7 @@ const doSubmit = async (values: any) => {
       message.error(res.description)
     }
   } catch (e) {
-    message.error('注册失败')
+    message.error('注册失败', e.message)
   }
 }
 </script>

@@ -10,9 +10,10 @@ import dayjs from 'dayjs'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { PIC_REVIEW_STATUS_ENUM, PIC_REVIEW_STATUS_MAP } from '../../constant/picture.ts'
+import { formatSize } from '../../utils'
+import { PlusOutlined } from '@ant-design/icons-vue'
 
 const loginUserSrore = useLoginUserStore()
-const loginUser = loginUserSrore.loginUser
 
 const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
@@ -131,7 +132,7 @@ const doReview = async () => {
       message.error('审核操作失败', data.message)
     }
   } catch (e) {
-    console.log(e.message)
+    console.log('审核操作失败', e.message)
   }
 }
 
@@ -178,49 +179,66 @@ onMounted(() => {
         </a-form>
       </a-modal>
     </div>
-    <div class="form">
-      <a-form layout="inline">
-        <a-form-item label="图片关键词">
-          <a-input
-            v-model:value="searchParams.searchText"
-            placeholder="输入关键词"
-            allow-clear
-          ></a-input>
-        </a-form-item>
-        <a-form-item label="图片分类">
-          <a-auto-complete
-            v-model:value="searchParams.picCategory"
-            placeholder="请输入图片标签"
-            mode="tags"
-            :options="categoryOptions"
-            style="width: 190px"
-          ></a-auto-complete>
-        </a-form-item>
-        <a-form-item label="图片标签">
-          <a-select
-            v-model:value="searchParams.picTags"
-            placeholder="请输入图片标签"
-            mode="tags"
-            :max-tag-count="2"
-            :options="tagOptions"
-            style="width: 190px"
-          >
-            <template #tagRender="{ value, label, option }">
-              <a-tag color="cyan">
-                {{ label }}
-              </a-tag>
-            </template>
-            <template #maxTagPlaceholder="omittedValues">
-              <a-tag color="blue" style="margin-right: 3px; font-weight: bold">
-                +{{ omittedValues.length }}标签
-              </a-tag>
-            </template>
-          </a-select>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" @click="doSearch">搜索</a-button>
-        </a-form-item>
-      </a-form>
+    <h2 style="margin-bottom: 16px; padding: 0 14px">图片管理</h2>
+    <div class="search" style="margin: 16px 0; padding: 0 16px">
+      <a-flex justify="space-between">
+        <div style="width: 60%">
+          <a-form layout="inline">
+            <a-form-item label="图片关键词">
+              <a-input
+                v-model:value="searchParams.searchText"
+                placeholder="输入关键词"
+                allow-clear
+              ></a-input>
+            </a-form-item>
+            <a-form-item label="图片分类">
+              <a-auto-complete
+                v-model:value="searchParams.picCategory"
+                placeholder="请输入图片标签"
+                mode="tags"
+                :options="categoryOptions"
+                style="width: 190px"
+              ></a-auto-complete>
+            </a-form-item>
+            <a-form-item label="图片标签">
+              <a-select
+                v-model:value="searchParams.picTags"
+                placeholder="请输入图片标签"
+                mode="tags"
+                :max-tag-count="2"
+                :options="tagOptions"
+                style="width: 190px"
+              >
+                <template #tagRender="{ value, label, option }">
+                  <a-tag color="cyan">
+                    {{ label }}
+                  </a-tag>
+                </template>
+                <template #maxTagPlaceholder="omittedValues">
+                  <a-tag color="blue" style="margin-right: 3px; font-weight: bold">
+                    +{{ omittedValues.length }}标签
+                  </a-tag>
+                </template>
+              </a-select>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" @click="doSearch">搜索</a-button>
+            </a-form-item>
+          </a-form>
+        </div>
+        <div>
+          <a-space>
+            <a-button href="/picture/add/unit" target="_blank">
+              <PlusOutlined />
+              创建图片
+            </a-button>
+            <a-button href="/picture/add/batch" target="_blank">
+              <PlusOutlined />
+              批量创建图片
+            </a-button>
+          </a-space>
+        </div>
+      </a-flex>
     </div>
     <div class="table">
       <a-table
@@ -244,28 +262,32 @@ onMounted(() => {
             </a-space>
           </template>
           <template v-else-if="column.dataIndex === 'picInfo'">
-            <div>格式:{{ record.picFormat }}</div>
-            <div>宽:{{ record.picWidth }}</div>
-            <div>高:{{ record.picHeight }}</div>
-            <div>宽高比:{{ record.picScale }}</div>
-            <div>大小:{{ record.picSize / 1024 }}</div>
+            <div class="picInfo">
+              <div>格式:{{ record.picFormat }}</div>
+              <div>宽:{{ record.picWidth }}</div>
+              <div>高:{{ record.picHeight }}</div>
+              <div>宽高比:{{ record.picScale }}</div>
+              <div>大小:{{ formatSize(record.picSize) }}</div>
+            </div>
           </template>
           <template v-else-if="column.dataIndex === 'userId'">
             <span>{{ record.userId }}</span>
           </template>
           <template v-else-if="column.dataIndex === 'reviewInfo'">
-            <div>审核状态:{{ PIC_REVIEW_STATUS_MAP[record.reviewStatus] }}</div>
-            <div>审核信息:{{ record.reviewMessage }}</div>
-            <div>审核人:{{ record.reviewerId }}</div>
-            <div>审核时间:{{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}</div>
+            <div class="reviewInfo">
+              <div>审核状态:{{ PIC_REVIEW_STATUS_MAP[record.reviewStatus] }}</div>
+              <div>审核信息:{{ record.reviewMessage }}</div>
+              <div>审核人:{{ record.reviewerId }}</div>
+              <div>审核时间:{{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}</div>
+            </div>
           </template>
           <template v-else-if="column.dataIndex === 'createTime'">
-            <div>
+            <div class="timeInfo">
               {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
           <template v-else-if="column.dataIndex === 'editTime'">
-            <div>
+            <div class="timeInfo">
               {{ dayjs(record.editTime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
           </template>
@@ -338,5 +360,23 @@ onMounted(() => {
 #pictureManage :deep(.ant-select-selection-item) {
   background: none;
   border: none;
+}
+
+#pictureManage :deep(.ant-form-item-label > label) {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#pictureManage .picInfo {
+  min-width: 85px;
+  overflow: hidden;
+}
+
+#pictureManage .reviewInfo {
+  min-width: 225px;
+}
+
+#pictureManage .timeInfo {
+  min-width: 135px;
 }
 </style>

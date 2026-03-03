@@ -37,7 +37,7 @@ const processRoutes = (routes: RouteRecordRaw[], menuList: MenuItem[]) => {
       label: route.name as string,
       icon: () => route.meta?.icon ?? null,
       access: route.meta?.access as string,
-      hideInMenu: route.meta?.hideInMenu as boolean,
+      hideInMenu: route.meta?.hideInMenu as boolean
     }
     if (route.children && route.children.length > 0) {
       menuItem.children = []
@@ -62,7 +62,7 @@ const items = computed(() => {
 })
 const doMenuClick = ({ key }: any) => {
   router.push({
-    path: key,
+    path: key
   })
 }
 // 用户注销
@@ -71,11 +71,11 @@ const doLogout = async () => {
   const res = resp.data
   if (res.code === 20000) {
     loginUserStore.setLoginUser({
-      userName: '未登录',
+      userName: '未登录'
     })
     message.success('退出登录')
     router.push({
-      path: '/user/login',
+      path: '/user/login'
     })
   } else {
     message.error(res.description)
@@ -91,10 +91,10 @@ router.afterEach((to, from, next) => {
     <a-row :wrap="false">
       <a-col flex="160px">
         <router-link to="/">
-          <div class="title-bar">
+          <a-flex align="center">
             <img src="../assets/logo.png" alt="logo" class="logo" />
             <div class="title">云图库</div>
-          </div>
+          </a-flex>
         </router-link>
       </a-col>
       <a-col flex="auto">
@@ -137,17 +137,15 @@ router.afterEach((to, from, next) => {
   </div>
 </template>
 <style scoped>
-#globalHeader .title-bar {
-  display: flex;
-  align-items: center;
+#globalHeader {
 }
 
-.title {
+#globalHeader .title {
   color: #000000;
   font-size: 20px;
 }
 
-.logo {
+#globalHeader .logo {
   width: 48px;
   height: 48px;
 }

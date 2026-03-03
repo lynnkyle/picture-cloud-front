@@ -72,8 +72,7 @@ const doSubmit = async (values: any) => {
       })
     }
   } catch (e) {
-    message.error('更新图片失败')
-    console.log('更新图片成功', e.message)
+    console.log('更新图片失败', e.message)
   }
 }
 const categoryOptions = ref<string[]>()
@@ -93,13 +92,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="addPicture">
+  <div id="pictureAdd">
     <h2 style="margin-bottom: 16px">{{ route.query?.id ? '修改图片' : '创建图片' }}</h2>
     <a-tabs v-model:activeKey="uploadType">
-      <a-tab-pane key="1" tab="文件上传">
+      <a-tab-pane key="file" tab="文件上传">
         <file-picture-upload :picture="picture" :on-success="onSuccess"></file-picture-upload>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="URL上传">
+      <a-tab-pane key="url" tab="URL上传">
         <url-picture-upload :picture="picture" :on-success="onSuccess"></url-picture-upload>
       </a-tab-pane>
     </a-tabs>
@@ -142,7 +141,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-#addPicture {
+#pictureAdd {
   max-width: 720px;
   margin: 0 auto;
 }

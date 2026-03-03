@@ -23,13 +23,13 @@ const doSubmit = async (values: any) => {
       message.success('登录成功')
       router.push({
         path: '/',
-        replace: true
+        replace: true,
       })
     } else {
       message.error(res.description)
     }
   } catch (e) {
-    message.error('登录失败')
+    console.log('登录失败', e.message)
   }
 }
 </script>
