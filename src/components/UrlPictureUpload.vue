@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { message, type UploadProps } from 'ant-design-vue'
-import { uploadPictureByUrlUsingPost, uploadPictureUsingPost } from '@/api/pictureController.ts'
+import { uploadPictureByUrl, uploadPicture } from '@/api/pictureController.ts'
 import { LoadingOutlined } from '@ant-design/icons-vue'
 
 interface Props {
@@ -20,7 +20,7 @@ const doUpload = async () => {
     if (props.picture) {
       params['id'] = props.picture.id
     }
-    const resp = await uploadPictureByUrlUsingPost(params)
+    const resp = await uploadPictureByUrl(params)
     const res = resp.data
     if (res.code === 20000 && res?.data) {
       message.success('图片上传成功')

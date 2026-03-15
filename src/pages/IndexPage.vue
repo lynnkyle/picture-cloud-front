@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { listPictureVoByPageUsingPost } from '@/api/pictureController.ts'
+import { listPictureVoByPage } from '@/api/pictureController.ts'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { useRouter } from 'vue-router'
 
@@ -60,7 +60,7 @@ const fetchPictureVOList = async () => {
     if (useTag) param.picTags.push(tagList[index])
   })
   try {
-    const resp = await listPictureVoByPageUsingPost(param)
+    const resp = await listPictureVoByPage(param)
     const res = resp.data
     if (res.code === 20000 && res.data) {
       dataList.value = res.data.records ?? []
@@ -116,7 +116,11 @@ onMounted(() => {
         <a-list-item>
           <a-card hoverable @click="doClickPicture(picture.id)">
             <template #cover>
-              <a-image :alt="picture.picName" :src="picture.picUrl" height="180px"></a-image>
+              <a-image
+                :alt="picture.picName"
+                :src="picture.thumbnailUrl ?? picture.picUrl"
+                height="180px"
+              ></a-image>
             </template>
             <a-card-meta :title="picture.picName">
               <template #description>

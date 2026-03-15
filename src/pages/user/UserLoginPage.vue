@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-import { userLoginUsingPost } from '@/api/userController.ts'
+import { userLogin } from '@/api/userController.ts'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
@@ -15,7 +15,7 @@ const formState = reactive<API.UserLoginRequest>({
 const loginUserStore = useLoginUserStore()
 const doSubmit = async (values: any) => {
   try {
-    const resp = await userLoginUsingPost(values)
+    const resp = await userLogin(values)
     const res = resp.data
     // 登录成功, 把登录态保存到全局状态中
     if (res.code === 20000 && res.data) {

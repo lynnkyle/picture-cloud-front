@@ -12,7 +12,7 @@ export const PIC_REVIEW_STATUS_MAP = {
 
 export const PIC_REVIEW_STATUS_OPTIONS = Object.keys(PIC_REVIEW_STATUS_MAP).map((key) => {
   return {
-    label: PIC_REVIEW_STATUS_MAP[key],
+    label: PIC_REVIEW_STATUS_MAP[Number(key)],
     value: key,
   }
 })

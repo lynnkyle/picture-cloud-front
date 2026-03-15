@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver'
 
-export const formatSize = (size?: number) => {
+export const formatPictureSize = (size?: number) => {
   if (!size) return '图片大小未知'
   if (size < 1024) return size + 'B'
   if (size < 1024 * 1024) return (size / 1024).toFixed(2) + 'KB'
@@ -12,4 +12,14 @@ export function downloadImage(url?: string, fileName?: string) {
     return
   }
   saveAs(url, fileName)
+}
+
+export const formatSpaceSize = (size?: number) => {
+  if (!size) return undefined
+  return (size / (1024 * 1024)).toFixed(0)
+}
+
+export const formatSpaceCount = (count?: number) => {
+  if (!count) return undefined
+  return count
 }

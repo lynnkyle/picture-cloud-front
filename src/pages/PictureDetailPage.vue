@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, h, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { deletePictureUsingPost, getPictureVoByIdUsingGet } from '@/api/pictureController.ts'
+import { deletePicture, getPictureVoById } from '@/api/pictureController.ts'
 import { useRouter } from 'vue-router'
-import { downloadImage, formatSize } from '../utils'
+import { downloadImage, formatPictureSize } from '../utils'
 import { DeleteOutlined, DownloadOutlined, EditOutlined } from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
@@ -23,7 +23,7 @@ const loading = ref<boolean>(true)
 
 const fetchPictureDetail = async () => {
   try {
-    const resp = await getPictureVoByIdUsingGet({ id: props.id })
+    const resp = await getPictureVoById({ id: props.id })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       picture.value = res.data
@@ -61,7 +61,7 @@ const doDelete = async () => {
   if (!id) {
     return
   }
-  const resp = await deletePictureUsingPost({ id })
+  const resp = await deletePicture({ id })
   const res = resp.data
   if (res.code === 20000 && res.data) {
     message.success('删除成功')
@@ -110,7 +110,7 @@ onMounted(() => {
               {{ picture.picFormat ?? '-' }}
             </a-descriptions-item>
             <a-descriptions-item label="图片大小">
-              {{ formatSize(picture.picSize) ?? '-' }}
+              {{ formatPictureSize(picture.picSize) ?? '-' }}
             </a-descriptions-item>
             <a-descriptions-item label="图片宽度">
               {{ picture.picWidth ?? '-' }}

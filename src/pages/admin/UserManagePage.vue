@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { listUserVoByPageUsingPost } from '@/api/userController.ts'
+import { listUserVoByPage } from '@/api/userController.ts'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
@@ -86,7 +86,7 @@ const doDelete = async (id: number) => {
   if (!id) {
     return
   }
-  const resp = await deleteUserUsingPost({ id })
+  const resp = await deleteUser({ id })
   const res = resp.data
   if (res.code === 20000 && res.data) {
     message.success('删除成功')
@@ -97,7 +97,7 @@ const doDelete = async (id: number) => {
 }
 // 获取数据
 const fetchUserVOList = async () => {
-  const resp = await listUserVoByPageUsingPost({
+  const resp = await listUserVoByPage({
     ...searchParams,
   })
   const res = resp.data
@@ -118,24 +118,32 @@ onMounted(() => {
   <div id="userManage">
     <h2 style="margin-bottom: 16px; padding: 0 14px">用户管理</h2>
     <div class="form" style="padding: 0 16px">
-      <a-form layout="inline">
-        <a-form-item label="账号">
-          <a-input
-            v-model:value="searchParams.userAccount"
-            placeholder="输入账号"
-            allow-clear
-          ></a-input>
-        </a-form-item>
-        <a-form-item label="用户名">
-          <a-input
-            v-model:value="searchParams.userName"
-            placeholder="输入用户名"
-            allow-clear
-          ></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" @click="doSearch">搜索</a-button>
-        </a-form-item>
+      <a-form>
+        <a-row :gutter="[24, 16]">
+          <a-col :span="8">
+            <a-form-item label="账号">
+              <a-input
+                v-model:value="searchParams.userAccount"
+                placeholder="输入账号"
+                allow-clear
+              ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item label="用户名">
+              <a-input
+                v-model:value="searchParams.userName"
+                placeholder="输入用户名"
+                allow-clear
+              ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item>
+              <a-button type="primary" @click="doSearch">搜索</a-button>
+            </a-form-item>
+          </a-col>
+        </a-row>
       </a-form>
     </div>
     <div class="table">
@@ -143,6 +151,7 @@ onMounted(() => {
         :columns="columns"
         :data-source="dataList"
         :pagination="pagination"
+        :scroll="{ x: 'max-content', y: 500 }"
         @change="doTableChange"
       >
         <template #bodyCell="{ column, record }">
@@ -180,6 +189,7 @@ onMounted(() => {
 #userManage .form {
   margin-bottom: 15px;
 }
+
 #userManage :deep(.ant-form-item-label > label) {
   font-size: 16px;
   font-weight: 400;

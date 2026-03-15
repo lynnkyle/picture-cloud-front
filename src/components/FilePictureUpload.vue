@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message, type UploadProps } from 'ant-design-vue'
-import { uploadPictureUsingPost } from '@/api/pictureController.ts'
+import { uploadPicture } from '@/api/pictureController.ts'
 
 interface Props {
   picture?: API.PictureVO
@@ -33,7 +33,7 @@ const doUpload = async ({ file }: any) => {
   loading.value = true
   try {
     const picId = props.picture ? { id: props.picture.id } : {}
-    const resp = await uploadPictureUsingPost(picId, {}, file)
+    const resp = await uploadPicture(picId, {}, file)
     const res = resp.data
     if (res.code === 20000 && res?.data) {
       message.success('图片上传成功')

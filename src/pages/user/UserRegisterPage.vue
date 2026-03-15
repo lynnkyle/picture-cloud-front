@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { LockOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import { userRegisterUsingPost } from '@/api/userController.ts'
+import { userRegister } from '@/api/userController.ts'
 
 const router = useRouter()
 
@@ -18,7 +18,7 @@ const doSubmit = async (values: any) => {
     return
   }
   try {
-    const resp = await userRegisterUsingPost(values)
+    const resp = await userRegister(values)
     const res = resp.data
     // 注册成功, 跳转到登录页面
     if (res.code === 20000 && res.data) {

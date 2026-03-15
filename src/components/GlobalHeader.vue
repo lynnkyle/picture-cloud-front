@@ -5,7 +5,7 @@ import { type RouteRecordRaw, useRoute, useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons-vue'
 import { type ItemType, type MenuProps, message } from 'ant-design-vue'
-import { userLogoutUsingPost } from '@/api/userController.ts'
+import { userLogout } from '@/api/userController.ts'
 import checkAccess from '@/access/checkAccess.ts'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 
@@ -37,7 +37,7 @@ const processRoutes = (routes: RouteRecordRaw[], menuList: MenuItem[]) => {
       label: route.name as string,
       icon: () => route.meta?.icon ?? null,
       access: route.meta?.access as string,
-      hideInMenu: route.meta?.hideInMenu as boolean
+      hideInMenu: route.meta?.hideInMenu as boolean,
     }
     if (route.children && route.children.length > 0) {
       menuItem.children = []
@@ -62,20 +62,20 @@ const items = computed(() => {
 })
 const doMenuClick = ({ key }: any) => {
   router.push({
-    path: key
+    path: key,
   })
 }
 // 用户注销
 const doLogout = async () => {
-  const resp = await userLogoutUsingPost()
+  const resp = await userLogout()
   const res = resp.data
   if (res.code === 20000) {
     loginUserStore.setLoginUser({
-      userName: '未登录'
+      userName: '未登录',
     })
     message.success('退出登录')
     router.push({
-      path: '/user/login'
+      path: '/user/login',
     })
   } else {
     message.error(res.description)
@@ -89,7 +89,7 @@ router.afterEach((to, from, next) => {
 <template>
   <div id="globalHeader">
     <a-row :wrap="false">
-      <a-col flex="160px">
+      <a-col flex="120px" style="display: flex; justify-content: center; align-items: center">
         <router-link to="/">
           <a-flex align="center">
             <img src="../assets/logo.png" alt="logo" class="logo" />
@@ -106,7 +106,7 @@ router.afterEach((to, from, next) => {
         />
       </a-col>
       <!--用户信息展示-->
-      <a-col flex="120px">
+      <a-col flex="120px" style="display: flex; justify-content: center; align-items: center">
         <div v-if="loginUserStore.loginUser.id">
           <a-dropdown>
             <a-space>

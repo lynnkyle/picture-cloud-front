@@ -7,7 +7,6 @@ import BasicLayout from '@/layouts/BasicLayout.vue'
 
 const locale = ref(zhCN)
 dayjs.locale('zh-cn')
-
 </script>
 
 <template>
@@ -18,4 +17,5 @@ dayjs.locale('zh-cn')
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

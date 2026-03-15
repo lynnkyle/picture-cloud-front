@@ -1,283 +1,408 @@
 declare namespace API {
-  type BaseResponseBoolean_ = {
+  type BaseResponseBoolean = {
     code?: number
     data?: boolean
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseInt_ = {
+  type BaseResponseInteger = {
     code?: number
     data?: number
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseIPagePicture_ = {
+  type BaseResponseIPagePicture = {
     code?: number
-    data?: IPagePicture_
-    description?: string
+    data?: IPagePicture
     message?: string
+    description?: string
   }
 
-  type BaseResponseIPagePictureVO_ = {
+  type BaseResponseIPagePictureVO = {
     code?: number
-    data?: IPagePictureVO_
-    description?: string
+    data?: IPagePictureVO
     message?: string
+    description?: string
   }
 
-  type BaseResponseIPageUserVO_ = {
+  type BaseResponseIPageSpace = {
     code?: number
-    data?: IPageUserVO_
-    description?: string
+    data?: IPageSpace
     message?: string
+    description?: string
   }
 
-  type BaseResponseLoginUserVO_ = {
+  type BaseResponseIPageSpaceVO = {
+    code?: number
+    data?: IPageSpaceVO
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseIPageUserVO = {
+    code?: number
+    data?: IPageUserVO
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseListSpaceLevel = {
+    code?: number
+    data?: SpaceLevel[]
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseLoginUserVO = {
     code?: number
     data?: LoginUserVO
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseLong_ = {
+  type BaseResponseLong = {
     code?: number
     data?: number
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponsePicture_ = {
+  type BaseResponsePicture = {
     code?: number
     data?: Picture
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponsePictureTagCategory_ = {
+  type BaseResponsePictureTagCategory = {
     code?: number
     data?: PictureTagCategory
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponsePictureVO_ = {
+  type BaseResponsePictureVO = {
     code?: number
     data?: PictureVO
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseString_ = {
+  type BaseResponseSpace = {
+    code?: number
+    data?: Space
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseSpaceVO = {
+    code?: number
+    data?: SpaceVO
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseString = {
     code?: number
     data?: string
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseUser_ = {
+  type BaseResponseUser = {
     code?: number
     data?: User
-    description?: string
     message?: string
+    description?: string
   }
 
-  type BaseResponseUserVO_ = {
+  type BaseResponseUserVO = {
     code?: number
     data?: UserVO
-    description?: string
     message?: string
+    description?: string
   }
 
   type DeleteRequest = {
     id?: number
   }
 
-  type getPictureByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
-  type getPictureVOByIdUsingGETParams = {
-    /** id */
-    id?: number
-  }
-
-  type getUserByIdUsingGETParams = {
-    /** id */
+  type getPictureByIdParams = {
     id: number
   }
 
-  type getUserVOByIdUsingGETParams = {
-    /** id */
+  type getPictureVOByIdParams = {
     id: number
   }
 
-  type IPagePicture_ = {
+  type getSpaceByIdParams = {
+    id: number
+  }
+
+  type getSpaceVOByIdParams = {
+    id: number
+  }
+
+  type getUserByIdParams = {
+    id: number
+  }
+
+  type getUserVOByIdParams = {
+    id: number
+  }
+
+  type IPagePicture = {
+    size?: number
+    total?: number
     current?: number
-    pages?: number
     records?: Picture[]
-    size?: number
-    total?: number
+    pages?: number
   }
 
-  type IPagePictureVO_ = {
+  type IPagePictureVO = {
+    size?: number
+    total?: number
     current?: number
-    pages?: number
     records?: PictureVO[]
-    size?: number
-    total?: number
+    pages?: number
   }
 
-  type IPageUserVO_ = {
-    current?: number
-    pages?: number
-    records?: UserVO[]
+  type IPageSpace = {
     size?: number
     total?: number
+    current?: number
+    records?: Space[]
+    pages?: number
+  }
+
+  type IPageSpaceVO = {
+    size?: number
+    total?: number
+    current?: number
+    records?: SpaceVO[]
+    pages?: number
+  }
+
+  type IPageUserVO = {
+    size?: number
+    total?: number
+    current?: number
+    records?: UserVO[]
+    pages?: number
   }
 
   type LoginUserVO = {
-    createTime?: string
-    editTime?: string
     id?: number
-    updateTime?: string
+    userName?: string
     userAccount?: string
     userAvatar?: string
-    userName?: string
     userProfile?: string
     userRole?: string
+    editTime?: string
+    createTime?: string
+    updateTime?: string
   }
 
   type Picture = {
-    createTime?: string
-    editTime?: string
     id?: number
-    isDelete?: number
-    picCategory?: string
-    picFormat?: string
-    picHeight?: number
-    picIntro?: string
     picName?: string
-    picScale?: number
-    picSize?: number
-    picTags?: string
     picUrl?: string
+    thumbnailUrl?: string
+    picIntro?: string
+    picCategory?: string
+    picTags?: string
+    picSize?: number
     picWidth?: number
-    reviewMessage?: string
-    reviewStatus?: number
-    reviewTime?: string
-    reviewerId?: number
-    updateTime?: string
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
     userId?: number
+    spaceId?: number
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+    reviewTime?: string
+    isDelete?: number
+    editTime?: string
+    createTime?: string
+    updateTime?: string
   }
 
   type PictureEditRequest = {
     id?: number
-    picCategory?: string
-    picIntro?: string
     picName?: string
+    picIntro?: string
+    picCategory?: string
     picTags?: string[]
   }
 
   type PictureQueryRequest = {
     current?: number
-    id?: number
     pageSize?: number
-    picCategory?: string
-    picFormat?: string
-    picHeight?: number
-    picIntro?: string
-    picName?: string
-    picScale?: number
-    picSize?: number
-    picTags?: string[]
-    picWidth?: number
-    reviewMessage?: string
-    reviewStatus?: number
-    reviewTime?: string
-    reviewerId?: number
-    searchText?: string
     sortField?: string
     sortOrder?: string
+    id?: number
+    picName?: string
+    picIntro?: string
+    picCategory?: string
+    picTags?: string[]
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
     userId?: number
+    spaceId?: number
+    searchText?: string
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+    reviewTime?: string
   }
 
   type PictureReviewerRequest = {
     id?: number
-    reviewMessage?: string
     reviewStatus?: number
+    reviewMessage?: string
   }
 
   type PictureTagCategory = {
-    categoryList?: string[]
     tagList?: string[]
+    categoryList?: string[]
   }
 
   type PictureUpdateRequest = {
     id?: number
-    picCategory?: string
-    picIntro?: string
     picName?: string
+    picIntro?: string
+    picCategory?: string
     picTags?: string[]
   }
 
   type PictureUploadByBatchRequest = {
+    searchText?: string
     count?: number
     namePrefix?: string
-    searchText?: string
   }
 
   type PictureUploadRequest = {
-    fileUrl?: string
     id?: number
+    fileUrl?: string
     picName?: string
+    spaceId?: number
   }
 
   type PictureVO = {
+    id?: number
+    picName?: string
+    picUrl?: string
+    thumbnailUrl?: string
+    picIntro?: string
+    picCategory?: string
+    picTags?: string[]
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
+    userId?: number
+    pictureId?: number
+    user?: UserVO
+    editTime?: string
+    createTime?: string
+    updateTime?: string
+  }
+
+  type Space = {
+    id?: number
+    spaceName?: string
+    spaceLevel?: number
+    maxSize?: number
+    maxCount?: number
+    totalSize?: number
+    totalCount?: number
+    userId?: number
     createTime?: string
     editTime?: string
-    id?: number
-    picCategory?: string
-    picFormat?: string
-    picHeight?: number
-    picIntro?: string
-    picName?: string
-    picScale?: number
-    picSize?: number
-    picTags?: string[]
-    picUrl?: string
-    picWidth?: number
     updateTime?: string
-    user?: UserVO
+    isDelete?: number
+  }
+
+  type SpaceAddRequest = {
+    spaceName?: string
+    spaceLevel?: number
+  }
+
+  type SpaceEditRequest = {
+    id?: number
+    spaceName?: string
+  }
+
+  type SpaceLevel = {
+    value?: number
+    text?: string
+    maxCount?: number
+    maxSize?: number
+  }
+
+  type SpaceQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    id?: number
+    spaceName?: string
+    spaceLevel?: number
     userId?: number
   }
 
-  type uploadPictureUsingPOSTParams = {
-    fileUrl?: string
+  type SpaceUpdateRequest = {
     id?: number
-    picName?: string
+    spaceName?: string
+    spaceLevel?: number
+    maxSize?: number
+    maxCount?: number
+  }
+
+  type SpaceVO = {
+    id?: number
+    spaceName?: string
+    spaceLevel?: number
+    maxSize?: number
+    maxCount?: number
+    totalSize?: number
+    totalCount?: number
+    userId?: number
+    user?: UserVO
+    createTime?: string
+    editTime?: string
+    updateTime?: string
+  }
+
+  type uploadPictureParams = {
+    pictureUploadRequest: PictureUploadRequest
   }
 
   type User = {
-    createTime?: string
-    editTime?: string
     id?: number
-    isDelete?: number
-    updateTime?: string
-    userAccount?: string
-    userAvatar?: string
     userName?: string
+    userAccount?: string
     userPassword?: string
+    userAvatar?: string
     userProfile?: string
     userRole?: string
+    isDelete?: number
+    editTime?: string
+    createTime?: string
+    updateTime?: string
   }
 
   type UserAddRequest = {
+    userName?: string
     userAccount?: string
     userAvatar?: string
-    userName?: string
     userProfile?: string
     userRole?: string
   }
@@ -289,41 +414,41 @@ declare namespace API {
 
   type UserQueryRequest = {
     current?: number
-    id?: number
     pageSize?: number
-    searchText?: string
     sortField?: string
     sortOrder?: string
-    userAccount?: string
+    id?: number
     userName?: string
+    userAccount?: string
     userProfile?: string
     userRole?: string
+    searchText?: string
   }
 
   type UserRegisterRequest = {
-    checkPassword?: string
     userAccount?: string
     userPassword?: string
+    checkPassword?: string
   }
 
   type UserUpdateRequest = {
     id?: number
-    userAccount?: string
-    userAvatar?: string
     userName?: string
+    userAccount?: string
     userPassword?: string
+    userAvatar?: string
     userProfile?: string
     userRole?: string
   }
 
   type UserVO = {
-    createTime?: string
     id?: number
-    updateTime?: string
+    userName?: string
     userAccount?: string
     userAvatar?: string
-    userName?: string
     userProfile?: string
     userRole?: string
+    createTime?: string
+    updateTime?: string
   }
 }

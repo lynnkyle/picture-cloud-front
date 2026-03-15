@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { getLoginUserUsingGet } from '@/api/userController.ts'
+import { getLoginUser } from '@/api/userController.ts'
 
 /**
  * 存储登录用户信息状态
@@ -11,7 +11,7 @@ export const useLoginUserStore = defineStore('loginUser', () => {
   })
 
   async function fetchLoginUser(): Promise<void> {
-    const resp = await getLoginUserUsingGet()
+    const resp = await getLoginUser()
     const res = resp.data
     if (res.data && res.code === 20000) {
       loginUser.value = res.data

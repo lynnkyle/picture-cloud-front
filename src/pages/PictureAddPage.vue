@@ -2,14 +2,9 @@
 import FilePictureUpload from '@/components/FilePictureUpload.vue'
 import { onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import {
-  getPictureByIdUsingGet,
-  listPictureCategoryTagUsingGet,
-  updatePictureUsingPost,
-} from '@/api/pictureController.ts'
+import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useRoute, useRouter } from 'vue-router'
-import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 
 const route = useRoute()
@@ -24,7 +19,7 @@ const getOldPicture = async () => {
     return
   }
   try {
-    const resp = await getPictureByIdUsingGet({ id })
+    const resp = await getPictureById({ id })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       const oldPicture = res.data
@@ -60,7 +55,7 @@ const doSubmit = async (values: any) => {
     return
   }
   try {
-    const resp = await updatePictureUsingPost({
+    const resp = await updatePicture({
       id: pictureId,
       ...values,
     })
@@ -70,22 +65,13 @@ const doSubmit = async (values: any) => {
       router.push({
         path: `/picture/detail/${pictureId}`,
       })
+    } else {
+      message.error(res.description)
     }
   } catch (e) {
     console.log('更新图片失败', e.message)
   }
 }
-const categoryOptions = ref<string[]>()
-const tagOptions = ref<string[]>()
-const categoryTagStore = useCategoryTagStore()
-categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
-  value: item,
-  label: item,
-}))
-tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
-  value: item,
-  label: item,
-}))
 onMounted(() => {
   getOldPicture()
 })
