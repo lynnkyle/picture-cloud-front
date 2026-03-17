@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
+import GlobalSider from '@/components/GlobalSider.vue'
 </script>
 <template>
   <div id="basicLayout">
@@ -7,9 +8,12 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
       <a-layout-header class="header">
         <GlobalHeader></GlobalHeader>
       </a-layout-header>
-      <a-layout-content class="content">
-        <router-view></router-view>
-      </a-layout-content>
+      <a-layout>
+        <GlobalSider class="slider"></GlobalSider>
+        <a-layout-content class="content">
+          <router-view></router-view>
+        </a-layout-content>
+      </a-layout>
       <a-layout-footer class="footer">
         <a
           href="https://github.com/lynnkyle/picture-cloud-front"
@@ -30,7 +34,17 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
 #basicLayout .header {
   background: #ffffff;
   color: unset;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
+}
+
+#basicLayout .slider {
+  background: #ffffff;
+  border-right: solid 1px #eee;
+  padding-top: 20px;
+}
+
+#basicLayout .slider :deep(.ant-menu-root) {
+  border-inline-end: none !important;
 }
 
 #basicLayout .content {

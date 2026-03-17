@@ -12,6 +12,7 @@ import PictureDetailPage from '@/pages/PictureDetailPage.vue'
 import PictureAddBatchPage from '@/pages/PictureAddBatchPage.vue'
 import SpaceManagePage from '@/pages/admin/SpaceManagePage.vue'
 import SpaceAddPage from '@/pages/SpaceAddPage.vue'
+import SpacePrivatePage from '@/pages/SpacePrivatePage.vue'
 
 const routes = [
   {
@@ -69,11 +70,6 @@ const routes = [
     },
   },
   {
-    path: '/space/add',
-    name: '空间创建',
-    component: SpaceAddPage,
-  },
-  {
     path: '/picture/detail/:id',
     name: '图片详情页',
     component: PictureDetailPage,
@@ -81,6 +77,19 @@ const routes = [
     meta: {
       hideInMenu: true,
     },
+  },
+  {
+    path: '/space/add',
+    name: '空间创建',
+    component: SpaceAddPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: '/',
+    name: '私有空间',
+    component: SpacePrivatePage,
   },
   {
     path: '/admin/space-manage',

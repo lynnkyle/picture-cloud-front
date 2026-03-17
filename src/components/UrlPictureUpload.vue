@@ -26,11 +26,11 @@ const doUpload = async () => {
       message.success('图片上传成功')
       props.onSuccess?.(res.data)
     } else {
-      message.error('图片上传失败', res.message)
+      message.error(`图片上传失败${res.message}`)
     }
   } catch (error) {
     console.error('图片上传失败', error)
-    message.error('图片上传失败', error.message)
+    message.error(`图片上传失败${error.message}`)
   }
   loading.value = false
 }

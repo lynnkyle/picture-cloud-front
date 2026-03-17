@@ -125,7 +125,7 @@ const doReview = async () => {
       modalInfo.open = false
       fetchPictureList()
     } else {
-      message.error('审核操作失败', data.message)
+      message.error(`审核操作失败${data.message}`)
     }
   } catch (e) {
     console.log('审核操作失败', e.message)

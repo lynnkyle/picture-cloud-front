@@ -119,6 +119,14 @@ router.afterEach((to, from, next) => {
             </a-space>
             <template #overlay>
               <a-menu>
+                <a-menu-item>
+                  <router-link to="/private">
+                    <a-space>
+                      <UserOutlined />
+                      我的空间
+                    </a-space>
+                  </router-link>
+                </a-menu-item>
                 <a-menu-item @click="doLogout">
                   <a-space>
                     <LogoutOutlined />

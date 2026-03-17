@@ -223,7 +223,7 @@ onMounted(() => {
                         "
                       />
                     </div>
-                    <div style="text-align: center">空间数量(ITEM)</div>
+                    <div style="text-align: center">空间图片数量</div>
                   </div>
                 </a-space>
               </div>

@@ -32,10 +32,10 @@ const doSubmit = async (values: any) => {
         path: '/',
       })
     } else {
-      message.error('批量创建图片失败' + res.description)
+      message.error(`批量创建图片失败${res.description}`)
     }
   } catch (e) {
-    message.error('批量创建图片失败' + res.description)
+    message.error(`批量创建图片失败${e.message}`)
     console.log('批量创建图片图片失败', e.message)
   }
   loading.value = true
@@ -68,7 +68,7 @@ const doSubmit = async (values: any) => {
           ></a-input>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit" style="width: 100%">批量创建 </a-button>
+          <a-button type="primary" html-type="submit" style="width: 100%">批量创建</a-button>
         </a-form-item>
       </a-form>
     </a-spin>

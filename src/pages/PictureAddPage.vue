@@ -6,6 +6,7 @@ import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useRoute, useRouter } from 'vue-router'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
+import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 
 const route = useRoute()
 const router = useRouter()
@@ -48,6 +49,18 @@ const rules: Record<string, Rule[]> = {
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
 }
+// 分类 / 标签
+const categoryOptions = ref<string[]>()
+const tagOptions = ref<string[]>()
+const categoryTagStore = useCategoryTagStore()
+categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
+  value: item,
+  label: item,
+}))
+tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
+  value: item,
+  label: item,
+}))
 const doSubmit = async (values: any) => {
   const pictureId = picture.id
   if (pictureId == null) {
@@ -120,7 +133,7 @@ onMounted(() => {
         ></a-select>
       </a-form-item>
       <a-form-item>
-        <a-button type="primary" html-type="submit" style="width: 100%">创建</a-button>
+        <a-button type="primary" html-type="submit" style="width: 100%">提交</a-button>
       </a-form-item>
     </a-form>
   </div>
