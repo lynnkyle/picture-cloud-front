@@ -4,8 +4,12 @@ import { message } from 'ant-design-vue'
 import { addSpace, getSpaceById, listSpaceLevel, updateSpace } from '@/api/spaceController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useRoute, useRouter } from 'vue-router'
-import { SPACE_LEVEL_OPTIONS } from '@/constant/space.ts'
+import { SPACE_LEVEL_ENUM, SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS } from '@/constant/space.ts'
 import { formatSpaceSize } from '../utils'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
+
+const loginUserStore = useLoginUserStore()
+const loginUser = loginUserStore.loginUser
 
 const route = useRoute()
 const router = useRouter()
@@ -14,7 +18,9 @@ const spaceLevelOptions = ref([])
 spaceLevelOptions.value = SPACE_LEVEL_OPTIONS
 
 const space = ref<API.SpaceVO>({})
-const spaceForm = reactive<API.SpaceAddRequest | API.SpaceEditRequest>({})
+const spaceForm = reactive<API.SpaceAddRequest | API.SpaceEditRequest>({
+  spaceLevel: SPACE_LEVEL_ENUM.COMMON.toString(),
+})
 
 const getOldSpace = async () => {
   const id = route.query?.id
@@ -64,10 +70,9 @@ const doSubmit = async (values: any) => {
       message.success('操作成功')
       const spaceId = res.data
       router.push({
-        path: `/space/detail/${spaceId}`,
+        path: `/space/${spaceId}`,
       })
     } else {
-      console.log(res)
       message.error(`操作失败${res.description}`)
     }
   } catch (e) {
@@ -88,7 +93,7 @@ const fetchSpaceLevelList = async () => {
       message.error(`获取空间级别列表失败${res.description}`)
     }
   } catch (e) {
-    console.log(`获取空间级别列表失败${e.message}`)
+    console.log(`获取空间级别列表失败`, e.message)
     message.error('获取空间级别列表失败')
   }
 }
@@ -116,6 +121,7 @@ onMounted(() => {
             v-model:value="spaceForm.spaceLevel"
             placeholder="请选择空间级别"
             :options="spaceLevelOptions"
+            :disabled="loginUser.userRole !== 'admin'"
           ></a-select>
         </a-form-item>
         <a-form-item>

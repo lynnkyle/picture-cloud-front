@@ -10,7 +10,7 @@ const router = useRouter()
 const checkUserSpace = async () => {
   //1).用户未登录，则直接跳转到登录页面
   const loginUser = loginUserStore.loginUser
-  if (loginUser.id) {
+  if (!loginUser?.id) {
     router.push({
       path: '/user/login',
       replace: true,

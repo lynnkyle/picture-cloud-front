@@ -32,8 +32,14 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
 const doUpload = async ({ file }: any) => {
   loading.value = true
   try {
-    const picId = props.picture ? { id: props.picture.id } : {}
-    const resp = await uploadPicture(picId, {}, file)
+    const params: API.PictureUploadRequest = {}
+    if (props.picture) {
+      params['id'] = props.picture.id
+      params['spaceId'] = props.picture.spaceId
+    }
+    const formData = new FormData()
+    formData.append('file', file)
+    const resp = await uploadPicture(params, formData)
     const res = resp.data
     if (res.code === 20000 && res?.data) {
       message.success('图片上传成功')

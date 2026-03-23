@@ -218,6 +218,7 @@ declare namespace API {
     picHeight?: number
     picScale?: number
     picFormat?: string
+    picStatus?: number
     userId?: number
     spaceId?: number
     reviewStatus?: number
@@ -235,6 +236,7 @@ declare namespace API {
     picName?: string
     picIntro?: string
     picCategory?: string
+    picStatus?: number
     picTags?: string[]
   }
 
@@ -253,6 +255,7 @@ declare namespace API {
     picHeight?: number
     picScale?: number
     picFormat?: string
+    picStatus?: number
     userId?: number
     spaceId?: number
     searchText?: string
@@ -278,6 +281,8 @@ declare namespace API {
     picName?: string
     picIntro?: string
     picCategory?: string
+    spaceId?: number
+    picStatus?: number
     picTags?: string[]
   }
 
@@ -307,8 +312,9 @@ declare namespace API {
     picHeight?: number
     picScale?: number
     picFormat?: string
+    picStatus?: number
     userId?: number
-    pictureId?: number
+    spaceId?: number
     user?: UserVO
     editTime?: string
     createTime?: string
