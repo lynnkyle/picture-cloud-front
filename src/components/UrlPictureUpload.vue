@@ -19,6 +19,7 @@ const doUpload = async () => {
     const params: API.PictureUploadRequest = { fileUrl: fileUrl.value }
     if (props.picture) {
       params['id'] = props.picture.id
+      params['spaceId'] = props.picture.spaceId
     }
     const resp = await uploadPictureByUrl(params)
     const res = resp.data

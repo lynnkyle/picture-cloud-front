@@ -30,7 +30,7 @@ export async function editPicture(body: API.PictureEditRequest, options?: { [key
 export async function getPictureById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getPictureByIdParams,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePicture>('/picture/get', {
     method: 'GET',
@@ -45,7 +45,7 @@ export async function getPictureById(
 export async function getPictureVoById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getPictureVOByIdParams,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePictureVO>('/picture/get/vo', {
     method: 'GET',
@@ -59,7 +59,7 @@ export async function getPictureVoById(
 /** 此处后端没有提供注释 POST /picture/list/page */
 export async function listPictureByPage(
   body: API.PictureQueryRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseIPagePicture>('/picture/list/page', {
     method: 'POST',
@@ -74,7 +74,7 @@ export async function listPictureByPage(
 /** 此处后端没有提供注释 POST /picture/list/page/vo */
 export async function listPictureVoByPage(
   body: API.PictureQueryRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseIPagePictureVO>('/picture/list/page/vo', {
     method: 'POST',
@@ -89,7 +89,7 @@ export async function listPictureVoByPage(
 /** 此处后端没有提供注释 POST /picture/list/page/vo/deprecated */
 export async function listPictureVoByPageDeprecated(
   body: API.PictureQueryRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseIPagePictureVO>('/picture/list/page/vo/deprecated', {
     method: 'POST',
@@ -104,7 +104,7 @@ export async function listPictureVoByPageDeprecated(
 /** 此处后端没有提供注释 POST /picture/list/page/vo/withoutCache */
 export async function listPictureVoByPageWithoutCache(
   body: API.PictureQueryRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseIPagePictureVO>('/picture/list/page/vo/withoutCache', {
     method: 'POST',
@@ -119,7 +119,7 @@ export async function listPictureVoByPageWithoutCache(
 /** 此处后端没有提供注释 POST /picture/review */
 export async function doPictureReview(
   body: API.PictureReviewerRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseBoolean>('/picture/review', {
     method: 'POST',
@@ -142,7 +142,7 @@ export async function listPictureCategoryTag(options?: { [key: string]: any }) {
 /** 此处后端没有提供注释 POST /picture/update */
 export async function updatePicture(
   body: API.PictureUpdateRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseLong>('/picture/update', {
     method: 'POST',
@@ -157,20 +157,13 @@ export async function updatePicture(
 /** 此处后端没有提供注释 POST /picture/upload */
 export async function uploadPicture(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.uploadPictureParams,
+  params: API.PictureUploadRequest,
   body: {},
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePictureVO>('/picture/upload', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    params: {
-      ...params,
-      pictureUploadRequest: undefined,
-      ...params['pictureUploadRequest'],
-    },
+    params: params,
     data: body,
     ...(options || {}),
   })
@@ -179,7 +172,7 @@ export async function uploadPicture(
 /** 此处后端没有提供注释 POST /picture/upload/batch */
 export async function uploadPictureByBatch(
   body: API.PictureUploadByBatchRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseInteger>('/picture/upload/batch', {
     method: 'POST',
@@ -194,7 +187,7 @@ export async function uploadPictureByBatch(
 /** 此处后端没有提供注释 POST /picture/upload/url */
 export async function uploadPictureByUrl(
   body: API.PictureUploadRequest,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request<API.BaseResponsePictureVO>('/picture/upload/url', {
     method: 'POST',

@@ -16,3 +16,20 @@ export const PIC_REVIEW_STATUS_OPTIONS = Object.keys(PIC_REVIEW_STATUS_MAP).map(
     value: key,
   }
 })
+
+export const PIC_STATUS_ENUM = {
+  PUBLIC: 0,
+  PRIVATE: 1,
+}
+
+export const PIC_STATUS_MAP = {
+  0: '公开',
+  1: '私有',
+}
+
+export const PIC_STATUS_OPTIONS = Object.keys(PIC_STATUS_MAP).map((key) => {
+  return {
+    label: PIC_STATUS_MAP[Number(key)],
+    value: key,
+  }
+})

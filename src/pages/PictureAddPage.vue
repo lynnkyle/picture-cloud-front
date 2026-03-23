@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import FilePictureUpload from '@/components/FilePictureUpload.vue'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useRoute, useRouter } from 'vue-router'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
+import { PIC_STATUS_ENUM, PIC_STATUS_OPTIONS } from '@/constant/picture.ts'
 
 const route = useRoute()
 const router = useRouter()
 
 const uploadType = ref<string>('file')
-
 const picture = reactive<API.PictureVO>({})
 const getOldPicture = async () => {
   const id = route.query?.id
@@ -28,7 +28,8 @@ const getOldPicture = async () => {
       pictureForm.picName = oldPicture.picName
       pictureForm.picIntro = oldPicture.picIntro
       pictureForm.picCategory = oldPicture.picCategory
-      pictureForm.picTags = JSON.parse(oldPicture.picTags)
+      if (oldPicture.picTags != null) pictureForm.picTags = JSON.parse(oldPicture.picTags)
+      pictureForm.picStatus = oldPicture.picStatus.toString()
     }
   } catch (e) {
     console.log('获取图片失败', e.message)
@@ -48,11 +49,12 @@ const rules: Record<string, Rule[]> = {
   ],
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
+  picStatus: [{ required: true, trigger: 'change' }],
 }
 // 分类 / 标签
+const categoryTagStore = useCategoryTagStore()
 const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
-const categoryTagStore = useCategoryTagStore()
 categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
   value: item,
   label: item,
@@ -61,6 +63,9 @@ tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
   value: item,
   label: item,
 }))
+const statusOptions = ref<string[]>()
+statusOptions.value = PIC_STATUS_OPTIONS
+
 const doSubmit = async (values: any) => {
   const pictureId = picture.id
   if (pictureId == null) {
@@ -70,13 +75,14 @@ const doSubmit = async (values: any) => {
   try {
     const resp = await updatePicture({
       id: pictureId,
+      spaceId: route.query?.space_id,
       ...values,
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       message.success('更新图片成功')
       router.push({
-        path: `/picture/detail/${pictureId}`,
+        path: `/picture/${pictureId}`,
       })
     } else {
       message.error(res.description)
@@ -85,6 +91,18 @@ const doSubmit = async (values: any) => {
     console.log('更新图片失败', e.message)
   }
 }
+watch(
+  () => route.query.space_id,
+  (newId) => {
+    if (newId != null) {
+      pictureForm.picStatus = PIC_STATUS_ENUM.PRIVATE.toString()
+    } else {
+      pictureForm.picStatus = PIC_STATUS_ENUM.PUBLIC.toString()
+    }
+    picture.spaceId = newId
+  },
+  { immediate: true }, // 一进页面就执行
+)
 onMounted(() => {
   getOldPicture()
 })
@@ -130,6 +148,13 @@ onMounted(() => {
           placeholder="请输入图片标签"
           :options="tagOptions"
           mode="tags"
+        ></a-select>
+      </a-form-item>
+      <a-form-item label="图片权限" name="picStatus">
+        <a-select
+          v-model:value="pictureForm.picStatus"
+          placeholder="请输入图片权限"
+          :options="statusOptions"
         ></a-select>
       </a-form-item>
       <a-form-item>

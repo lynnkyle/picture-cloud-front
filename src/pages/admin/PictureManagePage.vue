@@ -178,7 +178,7 @@ onMounted(() => {
     <h2 style="margin-bottom: 16px; padding: 0 14px">图片管理</h2>
     <div class="search" style="margin: 16px 0; padding: 0 16px">
       <a-row :gutter="[24, 16]">
-        <a-col :xs="24" :sm="24" :md="18" :lg="18" :xl="20">
+        <a-col :xs="24" :sm="24" :md="16" :lg="16" :xl="18">
           <div>
             <a-form>
               <a-row :gutter="24">
@@ -229,7 +229,7 @@ onMounted(() => {
             </a-form>
           </div>
         </a-col>
-        <a-col :xs="24" :sm="24" :md="6" :lg="6" :xl="4">
+        <a-col :xs="24" :sm="24" :md="8" :lg="8" :xl="6">
           <div>
             <a-space>
               <a-button href="/picture/add/unit" target="_blank">

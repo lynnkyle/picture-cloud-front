@@ -13,7 +13,7 @@ const loginUserStore = useLoginUserStore()
 const loginUser = loginUserStore.loginUser
 
 interface Props {
-  id: string | number
+  id: string | number // 图片id
 }
 
 const props = defineProps<Props>()
@@ -53,6 +53,7 @@ const doEdit = () => {
     path: '/picture/add',
     query: {
       id: picture.value?.id,
+      space_id: picture.value?.spaceId,
     },
   })
 }
@@ -123,7 +124,9 @@ onMounted(() => {
             </a-descriptions-item>
           </a-descriptions>
           <a-space wrap>
-            <a-button type="primary" :icon="h(DownloadOutlined)" @click="doDownload">免费下载</a-button>
+            <a-button type="primary" :icon="h(DownloadOutlined)" @click="doDownload"
+              >免费下载
+            </a-button>
             <a-button v-if="canOperate" :icon="h(EditOutlined)" @click="doEdit">编辑</a-button>
             <a-button v-if="canOperate" :icon="h(DeleteOutlined)" danger @click="doDelete"
               >删除
