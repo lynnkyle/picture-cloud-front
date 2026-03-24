@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
+import { ShareAltOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import { deletePicture } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
+import ShareModal from '@/components/ShareModal.vue'
+import { ref } from 'vue'
 
 interface Props {
   dataList?: API.PictureVO[]
@@ -24,7 +26,14 @@ const doClickPicture = (pictureId) => {
     path: `/picture/${pictureId}`,
   })
 }
-
+const shareModalRef = ref()
+const shareLink = ref<string>()
+const doShare = (picture) => {
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModalRef.value) {
+    shareModalRef.value.openModal()
+  }
+}
 const doEdit = (picture) => {
   router.push({
     path: '/picture/add',
@@ -78,6 +87,10 @@ const doDelete = async (picture) => {
               </template>
             </a-card-meta>
             <template #actions v-if="showActions">
+              <a-space @click.stop="doShare(picture)">
+                <ShareAltOutlined />
+                分享
+              </a-space>
               <a-space @click.stop="doEdit(picture)">
                 <EditOutlined />
                 编辑
@@ -91,6 +104,7 @@ const doDelete = async (picture) => {
         </a-list-item>
       </template>
     </a-list>
+    <share-modal ref="shareModalRef" :link="shareLink" />
   </div>
 </template>
 

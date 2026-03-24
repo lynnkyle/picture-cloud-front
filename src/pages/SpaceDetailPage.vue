@@ -98,19 +98,7 @@ const onSearch = async (params: API.PictureQueryRequest) => {
     ...searchParams.value,
     ...params,
   }
-  try {
-    const resp = await listPictureVoByPage(searchParams.value)
-    const res = resp.data
-    if (res.code === 20000 && res.data) {
-      dataList.value = res.data.records ?? []
-      total.value = Number(res.data.total) ?? 0
-    } else {
-      message.error(res.description)
-    }
-  } catch (e) {
-    console.log('获取列表列表失败', e.message)
-  }
-  picture_loading.value = false
+  fetchPictureVOList()
 }
 
 // 钩子函数

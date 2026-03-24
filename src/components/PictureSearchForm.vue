@@ -27,12 +27,13 @@ tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
 // 表格属性
 // 定义数据
 const dateRange = ref<[]>([])
-const onRangeChange = (dates: Date[], dateStrings: string[]) => {
-  if (dates) {
-    console.log('From: ', dates[0], ', to: ', dates[1])
-    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1])
+const onRangeChange = (dates: any[], dateStrings: string[]) => {
+  if (dates?.length >= 2) {
+    searchParams.startEditTime = dates[0].toDate()
+    searchParams.endEditTime = dates[1].toDate()
   } else {
-    console.log('Clear')
+    searchParams.startEditTime = undefined
+    searchParams.endEditTime = undefined
   }
 }
 const rangePresets = ref([
@@ -88,6 +89,7 @@ const doClear = () => {
                   <a-select
                     v-model:value="searchParams.picTags"
                     placeholder="请输入图片标签"
+                    mode="tags"
                     :options="tagOptions"
                   >
                     <template #tagRender="{ value, label, option }">
@@ -121,6 +123,7 @@ const doClear = () => {
                     format="YYYY-MM-DD HH:mm:ss"
                     :presets="rangePresets"
                     @change="onRangeChange"
+                    allow-clear
                   />
                 </a-form-item>
               </a-col>
