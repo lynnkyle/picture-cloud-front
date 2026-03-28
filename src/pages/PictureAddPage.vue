@@ -8,10 +8,12 @@ import { useRoute, useRouter } from 'vue-router'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { PIC_STATUS_ENUM, PIC_STATUS_OPTIONS } from '@/constant/picture.ts'
+import ImageCropper from '@/components/ImageCropper.vue'
+import logoImg from '@/assets/logo.png'
 
 const route = useRoute()
 const router = useRouter()
-
+// 图片上传
 const uploadType = ref<string>('file')
 const picture = reactive<API.PictureVO>({})
 const getOldPicture = async () => {
@@ -45,11 +47,16 @@ const rules: Record<string, Rule[]> = {
   picName: [{ required: true, trigger: 'change' }],
   picIntro: [
     { required: true, trigger: 'change' },
-    { max: 512, message: '图片简介过长' },
+    { max: 512, message: '图片简介过长' }
   ],
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
-  picStatus: [{ required: true, trigger: 'change' }],
+  picStatus: [{ required: true, trigger: 'change' }]
+}
+// 图片裁剪器
+const open = ref<boolean>(true)
+const closeModal = (e: MouseEvent) => {
+  open.value = false
 }
 // 分类 / 标签
 const categoryTagStore = useCategoryTagStore()
@@ -57,11 +64,11 @@ const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
 categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
   value: item,
-  label: item,
+  label: item
 }))
 tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
   value: item,
-  label: item,
+  label: item
 }))
 const statusOptions = ref<string[]>()
 statusOptions.value = PIC_STATUS_OPTIONS
@@ -76,13 +83,13 @@ const doSubmit = async (values: any) => {
     const resp = await updatePicture({
       id: pictureId,
       spaceId: route.query?.space_id,
-      ...values,
+      ...values
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       message.success('更新图片成功')
       router.push({
-        path: `/picture/${pictureId}`,
+        path: `/picture/${pictureId}`
       })
     } else {
       message.error(res.description)
@@ -101,7 +108,7 @@ watch(
     }
     picture.spaceId = newId
   },
-  { immediate: true }, // 一进页面就执行
+  { immediate: true } // 一进页面就执行
 )
 onMounted(() => {
   getOldPicture()
@@ -111,6 +118,9 @@ onMounted(() => {
 <template>
   <div id="pictureAdd">
     <h2 style="margin-bottom: 16px">{{ route.query?.id ? '修改图片' : '创建图片' }}</h2>
+    <a-modal v-model:open="open" title="图片编辑" :footer="false" @cancel="closeModal">
+      <image-cropper :img-url="picture.picUrl"></image-cropper>
+    </a-modal>
     <a-tabs v-model:activeKey="uploadType">
       <a-tab-pane key="file" tab="文件上传">
         <file-picture-upload :picture="picture" :on-success="onSuccess"></file-picture-upload>

@@ -19,6 +19,7 @@ const openModal = (e: MouseEvent) => {
 const closeModal = (e: MouseEvent) => {
   open.value = false
 }
+
 defineExpose({ openModal })
 </script>
 <template>
