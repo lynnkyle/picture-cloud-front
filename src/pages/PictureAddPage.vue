@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FilePictureUpload from '@/components/FilePictureUpload.vue'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, h, onMounted, reactive, ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
@@ -10,6 +10,8 @@ import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { PIC_STATUS_ENUM, PIC_STATUS_OPTIONS } from '@/constant/picture.ts'
 import ImageCropper from '@/components/ImageCropper.vue'
 import logoImg from '@/assets/logo.png'
+import { EditOutlined } from '@ant-design/icons-vue'
+import ImageOutPainting from '@/components/ImageOutPainting.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -47,16 +49,11 @@ const rules: Record<string, Rule[]> = {
   picName: [{ required: true, trigger: 'change' }],
   picIntro: [
     { required: true, trigger: 'change' },
-    { max: 512, message: '图片简介过长' }
+    { max: 512, message: '图片简介过长' },
   ],
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
-  picStatus: [{ required: true, trigger: 'change' }]
-}
-// 图片裁剪器
-const open = ref<boolean>(true)
-const closeModal = (e: MouseEvent) => {
-  open.value = false
+  picStatus: [{ required: true, trigger: 'change' }],
 }
 // 分类 / 标签
 const categoryTagStore = useCategoryTagStore()
@@ -64,11 +61,11 @@ const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
 categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
   value: item,
-  label: item
+  label: item,
 }))
 tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
   value: item,
-  label: item
+  label: item,
 }))
 const statusOptions = ref<string[]>()
 statusOptions.value = PIC_STATUS_OPTIONS
@@ -83,13 +80,13 @@ const doSubmit = async (values: any) => {
     const resp = await updatePicture({
       id: pictureId,
       spaceId: route.query?.space_id,
-      ...values
+      ...values,
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       message.success('更新图片成功')
       router.push({
-        path: `/picture/${pictureId}`
+        path: `/picture/${pictureId}`,
       })
     } else {
       message.error(res.description)
@@ -98,6 +95,14 @@ const doSubmit = async (values: any) => {
     console.log('更新图片失败', e.message)
   }
 }
+// 图片编辑(图片裁剪、扩图任务)
+const doImageCropper = () => {}
+// AI扩图
+const imageOutPainting = ref()
+const doImageOutPainting = () => {
+  imageOutPainting.value?.openModal()
+}
+const onImageOutPaintingSuccess = () => {}
 watch(
   () => route.query.space_id,
   (newId) => {
@@ -108,7 +113,7 @@ watch(
     }
     picture.spaceId = newId
   },
-  { immediate: true } // 一进页面就执行
+  { immediate: true }, // 一进页面就执行
 )
 onMounted(() => {
   getOldPicture()
@@ -118,9 +123,6 @@ onMounted(() => {
 <template>
   <div id="pictureAdd">
     <h2 style="margin-bottom: 16px">{{ route.query?.id ? '修改图片' : '创建图片' }}</h2>
-    <a-modal v-model:open="open" title="图片编辑" :footer="false" @cancel="closeModal">
-      <image-cropper :img-url="picture.picUrl"></image-cropper>
-    </a-modal>
     <a-tabs v-model:activeKey="uploadType">
       <a-tab-pane key="file" tab="文件上传">
         <file-picture-upload :picture="picture" :on-success="onSuccess"></file-picture-upload>
@@ -129,6 +131,15 @@ onMounted(() => {
         <url-picture-upload :picture="picture" :on-success="onSuccess"></url-picture-upload>
       </a-tab-pane>
     </a-tabs>
+    <div v-if="picture" class="editBar">
+      <a-button :icon="h(EditOutlined)" @click="doImageCropper">编辑图片</a-button>
+      <a-button :icon="h(EditOutlined)" @click="doImageOutPainting">AI 扩图</a-button>
+      <ImageOutPainting
+        ref="imageOutPainting"
+        :picture="picture"
+        :on-success="onImageOutPaintingSuccess"
+      ></ImageOutPainting>
+    </div>
     <a-form :model="pictureForm" :rules="rules" @finish="doSubmit">
       <a-form-item label="图片名称" name="picName">
         <a-input

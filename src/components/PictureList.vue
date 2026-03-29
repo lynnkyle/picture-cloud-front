@@ -26,14 +26,6 @@ const doClickPicture = (pictureId) => {
     path: `/picture/${pictureId}`,
   })
 }
-const shareModalRef = ref()
-const shareLink = ref<string>()
-const doShare = (picture) => {
-  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
-  if (shareModalRef.value) {
-    shareModalRef.value.openModal()
-  }
-}
 const doEdit = (picture) => {
   router.push({
     path: '/picture/add',
@@ -42,6 +34,15 @@ const doEdit = (picture) => {
       space_id: picture.spaceId,
     },
   })
+}
+// 分享
+const shareModalRef = ref()
+const shareLink = ref<string>()
+const doShare = (picture) => {
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModalRef.value) {
+    shareModalRef.value.openModal()
+  }
 }
 const doDelete = async (picture) => {
   const id = picture.id

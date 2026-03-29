@@ -6,6 +6,20 @@ declare namespace API {
     description?: string
   }
 
+  type BaseResponseCreateImageOutPaintingTaskResponse = {
+    code?: number
+    data?: CreateImageOutPaintingTaskResponse
+    message?: string
+    description?: string
+  }
+
+  type BaseResponseGetImageOutPaintingTaskResponse = {
+    code?: number
+    data?: GetImageOutPaintingTaskResponse
+    message?: string
+    description?: string
+  }
+
   type BaseResponseInteger = {
     code?: number
     data?: number
@@ -125,12 +139,27 @@ declare namespace API {
     description?: string
   }
 
+  type CreateImageOutPaintingTaskResponse = {
+    requestId?: string
+    output?: Output
+  }
+
   type DeleteRequest = {
     id?: number
   }
 
+  type GetImageOutPaintingTaskResponse = {
+    requestId?: string
+    output?: Output
+    usage?: Usage
+  }
+
   type getPictureByIdParams = {
     id: number
+  }
+
+  type getPictureOutPaintingTaskParams = {
+    taskId: string
   }
 
   type getPictureVOByIdParams = {
@@ -205,6 +234,23 @@ declare namespace API {
     updateTime?: string
   }
 
+  type Output = {
+    taskId?: string
+    taskStatus?: string
+    submitTime?: string
+    scheduledTime?: string
+    endTime?: string
+    outputImageUrl?: string
+    code?: string
+    message?: string
+  }
+
+  type Parameters = {
+    angle?: number
+    yScale?: number
+    xScale?: number
+  }
+
   type Picture = {
     id?: number
     picName?: string
@@ -229,6 +275,11 @@ declare namespace API {
     editTime?: string
     createTime?: string
     updateTime?: string
+  }
+
+  type PictureCreateOutPaintingTaskRequest = {
+    pictureId?: number
+    parameters?: Parameters
   }
 
   type PictureEditRequest = {
@@ -262,9 +313,9 @@ declare namespace API {
     reviewStatus?: number
     reviewMessage?: string
     reviewerId?: number
-    reviewTime?: string
     startEditTime?: string
     endEditTime?: string
+    reviewTime?: string
   }
 
   type PictureReviewerRequest = {
@@ -391,6 +442,10 @@ declare namespace API {
 
   type uploadPictureParams = {
     pictureUploadRequest: PictureUploadRequest
+  }
+
+  type Usage = {
+    imageCount?: number
   }
 
   type User = {

@@ -4,8 +4,14 @@ import { message } from 'ant-design-vue'
 import { deletePicture, getPictureVoById } from '@/api/pictureController.ts'
 import { useRouter } from 'vue-router'
 import { downloadImage, formatPictureSize } from '../utils'
-import { DeleteOutlined, DownloadOutlined, EditOutlined } from '@ant-design/icons-vue'
+import {
+  DeleteOutlined,
+  DownloadOutlined,
+  EditOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
+import ShareModal from '@/components/ShareModal.vue'
 
 const router = useRouter()
 
@@ -70,7 +76,15 @@ const doDelete = async () => {
     message.error(res.description)
   }
 }
-
+// 分享
+const shareModalRef = ref()
+const shareLink = ref<string>()
+const doShare = (picture) => {
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModalRef.value) {
+    shareModalRef.value.openModal()
+  }
+}
 // 钩子函数
 onMounted(() => {
   fetchPictureDetail()
@@ -128,6 +142,15 @@ onMounted(() => {
               >免费下载
             </a-button>
             <a-button v-if="canOperate" :icon="h(EditOutlined)" @click="doEdit">编辑</a-button>
+            <a-button
+              v-if="canOperate"
+              :icon="h(ShareAltOutlined)"
+              @click="doShare"
+              type="primary"
+              ghost
+            >
+              分享
+            </a-button>
             <a-button v-if="canOperate" :icon="h(DeleteOutlined)" danger @click="doDelete"
               >删除
             </a-button>
@@ -135,6 +158,7 @@ onMounted(() => {
         </a-card>
       </a-col>
     </a-row>
+    <share-modal ref="shareModalRef" :link="shareLink" />
   </div>
 </template>
 
