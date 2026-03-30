@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FilePictureUpload from '@/components/FilePictureUpload.vue'
-import { computed, h, onMounted, reactive, ref, watch } from 'vue'
+import { h, onMounted, reactive, ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
@@ -9,7 +9,6 @@ import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { PIC_STATUS_ENUM, PIC_STATUS_OPTIONS } from '@/constant/picture.ts'
 import ImageCropper from '@/components/ImageCropper.vue'
-import logoImg from '@/assets/logo.png'
 import { EditOutlined } from '@ant-design/icons-vue'
 import ImageOutPainting from '@/components/ImageOutPainting.vue'
 
@@ -48,8 +47,8 @@ const onUploadSuccess = (newPicture: API.PictureVO) => {
       path: route.path,
       query: {
         ...route.query,
-        id: newPicture.id
-      }
+        id: newPicture.id,
+      },
     })
   }
 }
@@ -59,11 +58,11 @@ const rules: Record<string, Rule[]> = {
   picName: [{ required: true, trigger: 'change' }],
   picIntro: [
     { required: true, trigger: 'change' },
-    { max: 512, message: '图片简介过长' }
+    { max: 512, message: '图片简介过长' },
   ],
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
-  picStatus: [{ required: true, trigger: 'change' }]
+  picStatus: [{ required: true, trigger: 'change' }],
 }
 // 分类 / 标签
 const categoryTagStore = useCategoryTagStore()
@@ -71,11 +70,11 @@ const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
 categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
   value: item,
-  label: item
+  label: item,
 }))
 tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
   value: item,
-  label: item
+  label: item,
 }))
 const statusOptions = ref<string[]>()
 statusOptions.value = PIC_STATUS_OPTIONS
@@ -89,13 +88,13 @@ const doSubmit = async (values: any) => {
     const resp = await updatePicture({
       id: pictureId,
       spaceId: route.query?.space_id,
-      ...values
+      ...values,
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       message.success('更新图片成功')
       router.push({
-        path: `/picture/${pictureId}`
+        path: `/picture/${pictureId}`,
       })
     } else {
       message.error(res.description)
@@ -106,7 +105,12 @@ const doSubmit = async (values: any) => {
 }
 
 // 图片编辑(图片裁剪、扩图任务)
+const imageCropper = ref()
 const doImageCropper = () => {
+  imageCropper.value?.openModal()
+}
+const onImageCropperSuccess = (newPicture: API.PictureVO) => {
+  Object.assign(picture, newPicture)
 }
 // AI扩图
 const imageOutPainting = ref()
@@ -126,7 +130,7 @@ watch(
     }
     picture.spaceId = newId
   },
-  { immediate: true } // 一进页面就执行
+  { immediate: true }, // 一进页面就执行
 )
 onMounted(() => {
   getOldPicture()
@@ -145,8 +149,15 @@ onMounted(() => {
       </a-tab-pane>
     </a-tabs>
     <div v-if="picture" class="editBar">
-      <a-button :icon="h(EditOutlined)" @click="doImageCropper">编辑图片</a-button>
-      <a-button :icon="h(EditOutlined)" @click="doImageOutPainting">AI 扩图</a-button>
+      <a-space>
+        <a-button :icon="h(EditOutlined)" @click="doImageCropper">编辑图片</a-button>
+        <a-button :icon="h(EditOutlined)" @click="doImageOutPainting">AI 扩图</a-button>
+      </a-space>
+      <ImageCropper
+        ref="imageCropper"
+        :picture="picture"
+        :on-success="onImageCropperSuccess"
+      ></ImageCropper>
       <ImageOutPainting
         ref="imageOutPainting"
         :picture="picture"
@@ -202,5 +213,10 @@ onMounted(() => {
 #pictureAdd {
   max-width: 720px;
   margin: 0 auto;
+}
+
+#pictureAdd .editBar {
+  text-align: center;
+  margin: 10px;
 }
 </style>

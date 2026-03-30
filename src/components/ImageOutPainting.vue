@@ -3,13 +3,13 @@ import { onMounted, ref, watch } from 'vue'
 import {
   createPictureOutPaintingTask,
   getPictureOutPaintingTask,
-  uploadPictureByUrl
+  uploadPictureByUrl,
 } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
 
 interface Props {
   picture?: API.PictureVO
-  onSuccess?: () => void
+  onSuccess?: (newPicture: API.PictureVO) => void
 }
 
 const props = defineProps<Props>()
@@ -40,10 +40,9 @@ const startPolling = () => {
     pollCount += 1
     try {
       const resp = await getPictureOutPaintingTask({
-        taskId: taskId.value
+        taskId: taskId.value,
       })
       const res = resp.data
-      console.log(res)
       if (res.code !== 20000 || !res.data) {
         message.error(`查询扩图任务失败：${res.description || '未知错误'}`)
         clearPolling()
@@ -90,8 +89,8 @@ const createPictureOutPainting = async () => {
       // TODO 根据需要设置扩图参数
       parameters: {
         xScale: 2,
-        yScale: 2
-      }
+        yScale: 2,
+      },
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
@@ -115,7 +114,7 @@ const uploadPictureOutPainting = async () => {
   try {
     const params: API.PictureUploadRequest = {
       fileUrl: resultPictureUrl.value,
-      spaceId: props.picture.spaceId
+      spaceId: props.picture.spaceId,
     }
     if (props.picture) {
       params['id'] = props.picture.id
@@ -150,7 +149,7 @@ watch(
 
     resultPictureUrl.value = resultCache.value[newId]
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -171,7 +170,9 @@ watch(
         </a-col>
       </a-row>
       <a-flex justify="center" gap="16" style="margin-top: 10px">
-        <a-button :loading="outPaintingLoading" @click="createPictureOutPainting">图片扩展</a-button>
+        <a-button :loading="outPaintingLoading" @click="createPictureOutPainting"
+          >图片扩展
+        </a-button>
         <a-button type="primary" ghost @click="uploadPictureOutPainting">图片保存</a-button>
       </a-flex>
     </a-modal>
