@@ -33,15 +33,25 @@ const getOldPicture = async () => {
       pictureForm.picIntro = oldPicture.picIntro
       pictureForm.picCategory = oldPicture.picCategory
       if (oldPicture.picTags != null) pictureForm.picTags = JSON.parse(oldPicture.picTags)
-      pictureForm.picStatus = oldPicture.picStatus.toString()
+      if (oldPicture.picStatus != null) pictureForm.picStatus = oldPicture.picStatus.toString()
     }
   } catch (e) {
-    console.log('获取图片失败', e.message)
+    console.log('获取图片失败', e)
+    message.error(`获取图片失败${e.message}`)
   }
 }
-const onSuccess = (newPicture: API.PictureVO) => {
+const onUploadSuccess = (newPicture: API.PictureVO) => {
   Object.assign(picture, newPicture)
   pictureForm.picName = newPicture.picName
+  if (newPicture.id) {
+    router.replace({
+      path: route.path,
+      query: {
+        ...route.query,
+        id: newPicture.id
+      }
+    })
+  }
 }
 
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -49,11 +59,11 @@ const rules: Record<string, Rule[]> = {
   picName: [{ required: true, trigger: 'change' }],
   picIntro: [
     { required: true, trigger: 'change' },
-    { max: 512, message: '图片简介过长' },
+    { max: 512, message: '图片简介过长' }
   ],
   picCategory: [{ required: true, trigger: 'change' }],
   picTags: [{ required: true, trigger: 'change' }],
-  picStatus: [{ required: true, trigger: 'change' }],
+  picStatus: [{ required: true, trigger: 'change' }]
 }
 // 分类 / 标签
 const categoryTagStore = useCategoryTagStore()
@@ -61,15 +71,14 @@ const categoryOptions = ref<string[]>()
 const tagOptions = ref<string[]>()
 categoryOptions.value = (categoryTagStore.categoryList ?? []).map((item: string) => ({
   value: item,
-  label: item,
+  label: item
 }))
 tagOptions.value = (categoryTagStore.tagList ?? []).map((item: string) => ({
   value: item,
-  label: item,
+  label: item
 }))
 const statusOptions = ref<string[]>()
 statusOptions.value = PIC_STATUS_OPTIONS
-
 const doSubmit = async (values: any) => {
   const pictureId = picture.id
   if (pictureId == null) {
@@ -80,13 +89,13 @@ const doSubmit = async (values: any) => {
     const resp = await updatePicture({
       id: pictureId,
       spaceId: route.query?.space_id,
-      ...values,
+      ...values
     })
     const res = resp.data
     if (res.code === 20000 && res.data) {
       message.success('更新图片成功')
       router.push({
-        path: `/picture/${pictureId}`,
+        path: `/picture/${pictureId}`
       })
     } else {
       message.error(res.description)
@@ -95,14 +104,18 @@ const doSubmit = async (values: any) => {
     console.log('更新图片失败', e.message)
   }
 }
+
 // 图片编辑(图片裁剪、扩图任务)
-const doImageCropper = () => {}
+const doImageCropper = () => {
+}
 // AI扩图
 const imageOutPainting = ref()
 const doImageOutPainting = () => {
   imageOutPainting.value?.openModal()
 }
-const onImageOutPaintingSuccess = () => {}
+const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
+  Object.assign(picture, newPicture)
+}
 watch(
   () => route.query.space_id,
   (newId) => {
@@ -113,7 +126,7 @@ watch(
     }
     picture.spaceId = newId
   },
-  { immediate: true }, // 一进页面就执行
+  { immediate: true } // 一进页面就执行
 )
 onMounted(() => {
   getOldPicture()
@@ -125,10 +138,10 @@ onMounted(() => {
     <h2 style="margin-bottom: 16px">{{ route.query?.id ? '修改图片' : '创建图片' }}</h2>
     <a-tabs v-model:activeKey="uploadType">
       <a-tab-pane key="file" tab="文件上传">
-        <file-picture-upload :picture="picture" :on-success="onSuccess"></file-picture-upload>
+        <file-picture-upload :picture="picture" :on-success="onUploadSuccess"></file-picture-upload>
       </a-tab-pane>
       <a-tab-pane key="url" tab="URL上传">
-        <url-picture-upload :picture="picture" :on-success="onSuccess"></url-picture-upload>
+        <url-picture-upload :picture="picture" :on-success="onUploadSuccess"></url-picture-upload>
       </a-tab-pane>
     </a-tabs>
     <div v-if="picture" class="editBar">
