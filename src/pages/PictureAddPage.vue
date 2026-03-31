@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FilePictureUpload from '@/components/FilePictureUpload.vue'
-import { h, onMounted, reactive, ref, watch } from 'vue'
+import { computed, h, onMounted, reactive, ref, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import { getPictureById, updatePicture } from '@/api/pictureController.ts'
 import type { Rule } from 'ant-design-vue/es/form'
@@ -9,7 +9,7 @@ import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import { useCategoryTagStore } from '@/stores/useCategoryTagsStore.ts'
 import { PIC_STATUS_ENUM, PIC_STATUS_OPTIONS } from '@/constant/picture.ts'
 import ImageCropper from '@/components/ImageCropper.vue'
-import { EditOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, ExpandOutlined } from '@ant-design/icons-vue'
 import ImageOutPainting from '@/components/ImageOutPainting.vue'
 
 const route = useRoute()
@@ -105,6 +105,10 @@ const doSubmit = async (values: any) => {
 }
 
 // 图片编辑(图片裁剪、扩图任务)
+// 图片裁剪
+const disabled=computed(()=>{
+  return !picture.id
+})
 const imageCropper = ref()
 const doImageCropper = () => {
   imageCropper.value?.openModal()
@@ -150,8 +154,8 @@ onMounted(() => {
     </a-tabs>
     <div v-if="picture" class="editBar">
       <a-space>
-        <a-button :icon="h(EditOutlined)" @click="doImageCropper">编辑图片</a-button>
-        <a-button :icon="h(EditOutlined)" @click="doImageOutPainting">AI 扩图</a-button>
+        <a-button :icon="h(EditOutlined)" @click="doImageCropper" :disabled="disabled">编辑图片</a-button>
+        <a-button :icon="h(ExpandOutlined)" @click="doImageOutPainting" :disabled="disabled">AI 扩图</a-button>
       </a-space>
       <ImageCropper
         ref="imageCropper"

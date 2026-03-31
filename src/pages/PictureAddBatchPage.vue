@@ -20,7 +20,7 @@ const rules: Record<string, Rule[]> = {
   namePrefix: [{ required: true, trigger: 'change' }],
 }
 const doSubmit = async (values: any) => {
-  loading.value = false
+  loading.value = true
   try {
     const resp = await uploadPictureByBatch({
       ...pictureForm,
@@ -38,7 +38,7 @@ const doSubmit = async (values: any) => {
     message.error(`批量创建图片失败${e.message}`)
     console.log('批量创建图片图片失败', e.message)
   }
-  loading.value = true
+  loading.value = false
 }
 </script>
 

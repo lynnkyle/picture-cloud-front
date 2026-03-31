@@ -23,3 +23,12 @@ export const formatSpaceCount = (count?: number) => {
   if (!count) return undefined
   return count
 }
+
+export const getFileSuffix = (fileUrl: string | undefined) => {
+  if (!fileUrl) return undefined
+  const index = fileUrl.lastIndexOf('.')
+  if (index === -1 || index === fileUrl.length - 1) {
+    return ''
+  }
+  return fileUrl.slice(index + 1).toLowerCase()
+}

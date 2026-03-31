@@ -154,7 +154,7 @@ watch(
 </script>
 
 <template>
-  <div class="imageOutPainting">
+  <div id="imageOutPainting">
     <a-modal title="AI扩图" :footer="false" v-model:open="open" @cancel="closeModal">
       <a-row :gutter="24">
         <a-col span="12">
@@ -180,6 +180,6 @@ watch(
 </template>
 
 <style scoped>
-.imageOutPainting {
+#imageOutPainting {
 }
 </style>

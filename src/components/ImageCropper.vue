@@ -4,6 +4,7 @@ import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { uploadPicture } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
+import { getFileSuffix } from '@/utils'
 
 interface Props {
   picture?: API.PictureVO
@@ -28,16 +29,17 @@ const changeScale = (num) => {
   cropperRef.value?.changeScale(num)
 }
 const rotateLeft = () => {
-  cropperRef.value?.changeScale()
+  cropperRef.value?.rotateLeft()
 }
 const rotateRight = () => {
-  cropperRef.value?.rotateLeft()
+  cropperRef.value?.rotateRight()
 }
 const uploadLoading = ref(false)
 const cropFinish = () => {
   cropperRef.value?.getCropBlob((blob) => {
     // blob为已经裁切成功的文件
-    const fileName = props.picture?.picName || 'image'
+    const suffix = getFileSuffix(props.picture?.picUrl)
+    const fileName = (props.picture?.picName || 'image') + '.' + suffix
     const file = new File([blob], fileName, { type: blob.type })
     handleUpload({ file })
   })
@@ -70,8 +72,14 @@ const handleUpload = async ({ file }: any) => {
 </script>
 
 <template>
-  <div class="imageCropper">
-    <a-modal title="图片裁剪" :footer="false" v-model:open="open" @cancel="closeModal">
+  <div id="imageCropper">
+    <a-modal
+      title="图片裁剪"
+      :footer="false"
+      v-model:open="open"
+      @cancel="closeModal"
+      :destroyOnClose="true"
+    >
       <!--图片裁切组件//TODO output-size output-type full high-->
       <vue-cropper
         ref="cropperRef"
@@ -82,8 +90,8 @@ const handleUpload = async ({ file }: any) => {
         :fixed-box="false"
         :auto-crop="true"
         :center-box="true"
-        :onSuccess="onSuccess"
-        style="margin-bottom: 10px"
+        :onSuccess="props.onSuccess"
+        class="vue-cropper"
       ></vue-cropper>
       <!--图片操作组件-->
       <div class="image-cropper-action">
@@ -100,15 +108,16 @@ const handleUpload = async ({ file }: any) => {
 </template>
 
 <style scoped>
-.imageCropper {
+#imageCropper {
 }
 
-.imageCropper :deep(.vue-cropper) {
+.vue-cropper {
   width: 100% !important;
-  height: 500px !important;
+  height: 500px !important; /* 强制指定一个固定高度 */
+  margin-bottom: 10px;
 }
 
-.imageCropper .image-cropper-action {
+.image-cropper-action {
   text-align: center;
 }
 </style>
